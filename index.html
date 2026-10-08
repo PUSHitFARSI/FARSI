@@ -2297,9 +2297,6 @@ function vToday() {
   const pi = dayNum() % PROV_.length, p = PROV_[pi], pm = POEMS_[(dayNum() * 7 + 3) % POEMS_.length];
   return `<div class="hero"><p class="date fa">${esc(faDate() || new Date().toDateString())}</p>
     <div class="greet"><span class="muted">${g[1]}, ${g[2]}</span><span class="fa">${g[0]}</span></div></div>
-  ${window.OFFLINE_BUILD && !S.xp && !Object.keys(S.w).length ? `<div class="panel" style="margin-top:20px"><b>Your own copy, fresh start.</b>
-    <p class="small muted" style="margin:6px 0 12px">Practiced in the online version before? Copy your backup code there (More, then Back up your progress) and paste it here to bring everything over.</p>
-    <button class="btn primary full" data-tab="more">Restore my progress</button></div>` : ""}
   <div class="stats3">${ring(Math.min(1, L.xp / goal), L.xp, goal)}
     <div class="stat"><b>${starSVG()}${streak()}</b><span>day streak</span></div>
     <div class="stat"><b class="lvl-fa">${esc(lv.fa)}</b><span>${lv.en}${lv.next ? `, ${lvlPct}% to next` : ""}</span></div></div>
