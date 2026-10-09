@@ -490,6 +490,40 @@ nav.tabs button.on .fa{color:var(--accent)}
 .rmeta .rmr{margin-left:auto;white-space:nowrap}
 .signs{grid-auto-flow:row dense}
 
+/* ---------- listening ---------- */
+.big-cta.qlcta .n svg{width:30px;height:30px;display:block;margin-bottom:6px}
+.ltag{font-family:var(--ui)!important;font-size:.78rem!important;font-variant-numeric:tabular-nums}
+.player{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:14px 16px}
+.pbig{width:60px;height:60px;border-radius:50%;border:0;background:var(--accent);color:var(--on-accent);display:flex;align-items:center;justify-content:center;flex:none}
+.pbig svg{width:28px;height:28px}
+.pinfo{flex:1;min-width:0}
+.pbar{height:6px;background:var(--soft);border-radius:3px;overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--accent);transition:width .25s linear}
+.pt{display:flex;justify-content:space-between;gap:8px;font-size:.8rem;color:var(--muted);margin-top:8px;font-variant-numeric:tabular-nums}
+.pctl{display:grid;grid-template-columns:1fr 1.6fr 1fr;gap:8px;margin-top:10px}
+.pctl .btn{min-height:44px;padding:8px 10px}
+.pctl .btn svg{width:18px;height:18px}
+.seg.lrate{margin-top:10px}
+.ltext{margin-top:16px}
+.lplace{color:var(--muted);font-size:.9rem;text-align:center;margin:6px 8px 0}
+.lchips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:14px 0 4px}
+.lchips button{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--muted);font-variant-numeric:tabular-nums}
+.lchips button.heard{background:var(--soft);color:var(--ink)}
+.lchips button.cur{border-color:var(--accent);color:var(--accent);font-weight:600}
+.lsent{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin-bottom:8px;transition:border-color .2s,background .2s}
+.lsent.cur{border-color:var(--accent);background:var(--accent-soft)}
+.lplay{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--accent);display:flex;align-items:center;justify-content:center;margin-top:4px}
+.lplay svg{width:16px;height:16px}
+.lbody{min-width:0}
+.lfa{font-family:var(--fa);direction:rtl;text-align:right;font-size:calc(1.25rem*var(--fa-scale));line-height:2.05}
+.lfin{color:var(--muted);font-size:.88rem;line-height:1.5;margin-top:2px}
+.len{font-size:.9rem;line-height:1.5;margin-top:4px}
+.qlplay{margin:4px auto 0;min-width:180px}
+.qlplay svg{width:18px;height:18px}
+.newslinks a{display:flex;flex-direction:column;padding:12px 14px;margin-top:8px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2);color:var(--ink);text-decoration:none}
+.newslinks a span{font-size:.82rem;color:var(--muted)}
+.newslinks a b{font-weight:600;color:var(--accent)}
+
 </style>
 </head>
 <body>
@@ -498,6 +532,7 @@ nav.tabs button.on .fa{color:var(--accent)}
   <button data-tab="today"><span class="fa">امروز</span>Today</button>
   <button data-tab="words"><span class="fa">واژه</span>Words</button>
   <button data-tab="read"><span class="fa">خواندن</span>Read</button>
+  <button data-tab="listen"><span class="fa">شنیدن</span>Listen</button>
   <button data-tab="type"><span class="fa">تایپ</span>Type</button>
   <button data-tab="drills"><span class="fa">تمرین</span>Drills</button>
   <button data-tab="more"><span class="fa">بیشتر</span>More</button>
@@ -1745,6 +1780,140 @@ const STORY = [
 ]}
 ];
 
+// ---- data_listen.js ----
+// Listening texts. "audio" texts are made for the ear (messages, announcements, forecasts).
+// The news reports are about real events (dates and facts checked) and also appear in the Read tab.
+const LISTEN = [
+{id:"la1", grp:"audio", lvl:1, fa:"پیام~ صوتی", en:"A voice message", s:[
+["سلام، منم سارا. ببخشید که دیروز نتونستم بیام.","Hi, it's me, Sara. Sorry I couldn't come yesterday."],
+["مامانم یه کم مریض بود و باید پیشش می|موندم.","My mom was a little sick and I had to stay with her."],
+["امروز عصر وقت داری با هم بریم پیاده|روی؟","Are you free this afternoon to go for a walk together?"],
+["اگه وقت داری، بهم زنگ بزن یا پیام بده.","If you're free, call me or send me a message."],
+["قربونت، خداحافظ.","Thanks, dear. Bye."]
+], q:[
+["Why couldn't Sara come yesterday?","Her mom was sick","She had to work","Her car broke down"],
+["What does Sara suggest?","Going for a walk","Watching a film","Having dinner out"]
+]},
+{id:"la4", grp:"audio", lvl:1, gl:{"بعد":["ba'd","next"]}, fa:"در مترو", en:"On the metro", s:[
+["ایستگاه~ بعد: تجریش.","Next station: Tajrish."],
+["مسافران~ محترم، لطفاً هنگام~ پیاده شدن مراقب~ فاصله|ی بین~ قطار و سکو باشید.","Dear passengers, please mind the gap between the train and the platform when you get off."],
+["این قطار به سمت~ ایستگاه~ تجریش حرکت می|کند.","This train is going toward Tajrish station."],
+["لطفاً صندلی|های ویژه را به سالمندان و بانوان~ باردار واگذار کنید.","Please give the priority seats to the elderly and pregnant women."]
+], q:[
+["What is the next station?","Tajrish","Sadeghiyeh","Kahrizak"],
+["Who are the priority seats for?","The elderly and pregnant women","Students","Tourists"]
+]},
+{id:"la2", grp:"audio", lvl:2, fa:"اطلاعیه|ی فرودگاه", en:"An airport announcement", s:[
+["مسافران~ محترم~ پرواز~ شماره|ی ۷۲۵ به مقصد~ شیراز، توجه فرمایید.","Passengers on flight 725 to Shiraz, your attention please."],
+["به علت~ شرایط~ نامساعد~ جوی، این پرواز با یک ساعت تأخیر انجام می|شود.","Because of bad weather, this flight will leave one hour late."],
+["ساعت~ جدید~ پرواز ۱۸:۳۰ است.","The new departure time is 18:30."],
+["سوار شدن از درب~ شماره|ی ۴ انجام خواهد شد.","Boarding will be at gate 4."],
+["از صبر و شکیبایی~ شما سپاسگزاریم.","Thank you for your patience."]
+], q:[
+["Where is the flight going?","Shiraz","Mashhad","Tabriz"],
+["How late is the flight?","One hour","Thirty minutes","Three hours"]
+]},
+{id:"la3", grp:"audio", lvl:2, fa:"پیش|بینی~ هوا", en:"The weather forecast", s:[
+["به گزارش~ سازمان~ هواشناسی، از فردا هوای بیشتر~ مناطق~ کشور سردتر می|شود.","According to the weather service, from tomorrow most of the country will get colder."],
+["در تهران دمای هوا تا پنج درجه کاهش می|یابد.","In Tehran the temperature will drop by up to five degrees."],
+["در شهرهای شمالی باران می|بارد و در مناطق~ کوهستانی احتمال~ بارش~ برف وجود دارد.","It will rain in the northern cities, and snow is possible in the mountains."],
+["در جنوب~ کشور هوا همچنان گرم و آفتابی خواهد بود.","In the south of the country it will stay warm and sunny."],
+["هواشناسی به رانندگان توصیه کرده است که با احتیاط رانندگی کنند.","The weather service has advised drivers to drive carefully."]
+], q:[
+["What will happen in Tehran?","It will get colder","It will get much warmer","There will be heavy snow"],
+["What will the weather be like in the south?","Warm and sunny","Rainy","Snowy"]
+]},
+
+{id:"n8", lvl:3, news:"Dec 2021", fa:"پرتاب~ تلسکوپ~ فضایی~ جیمز وب", en:"The James Webb telescope launches", s:[
+["تلسکوپ~ فضایی~ جیمز وب، بزرگ|ترین تلسکوپ~ فضایی~ تاریخ، روز~ ۴ دی ۱۴۰۰ به فضا پرتاب شد.","The James Webb Space Telescope, the largest space telescope in history, was launched on 25 December 2021."],
+["این تلسکوپ با یک موشک~ آریان ۵ از گویان~ فرانسه در آمریکای جنوبی به فضا رفت.","It went into space on an Ariane 5 rocket from French Guiana in South America."],
+["جیمز وب حاصل~ همکاری~ ناسا، آژانس~ فضایی~ اروپا و آژانس~ فضایی~ کانادا است.","James Webb is a joint project of NASA, the European Space Agency and the Canadian Space Agency."],
+["آینه|ی اصلی~ این تلسکوپ از ۱۸ قطعه|ی شش|ضلعی ساخته شده و قطر~ آن حدود~ شش و نیم متر است.","The telescope's main mirror is made of 18 hexagonal pieces and is about six and a half meters across."],
+["این تلسکوپ در فاصله|ی حدود~ یک و نیم میلیون کیلومتری~ زمین قرار دارد.","The telescope sits about one and a half million kilometers from Earth."],
+["نخستین تصاویر~ رنگی~ جیمز وب در تیر~ ۱۴۰۱ منتشر شد و دانشمندان را شگفت|زده کرد.","James Webb's first color images were released in July 2022 and amazed scientists."]
+], q:[
+["Where was the telescope launched from?","French Guiana","Florida","Kazakhstan"],
+["How far from Earth is it?","About 1.5 million kilometers","About 400 kilometers","About 150 million kilometers"]
+]},
+{id:"n9", lvl:3, news:"Aug 2014", fa:"مریم میرزاخانی و مدال~ فیلدز", en:"Maryam Mirzakhani wins the Fields Medal", s:[
+["مریم میرزاخانی، ریاضی|دان~ ایرانی، در مرداد~ ۱۳۹۳ نخستین زنی شد که مدال~ فیلدز را دریافت کرد.","In August 2014, the Iranian mathematician Maryam Mirzakhani became the first woman to receive the Fields Medal."],
+["مدال~ فیلدز را اغلب «نوبل~ ریاضیات» می|نامند و هر چهار سال یک بار اهدا می|شود.","The Fields Medal is often called the \"Nobel Prize of mathematics\" and is awarded once every four years."],
+["این جایزه در کنگره|ی بین|المللی~ ریاضی|دانان در شهر~ سئول به او اهدا شد.","She received it at the International Congress of Mathematicians in Seoul."],
+["میرزاخانی در سال~ ۱۹۷۷ در تهران به دنیا آمد و در دوران~ دبیرستان دو بار در المپیاد~ جهانی~ ریاضی مدال~ طلا گرفت.","Mirzakhani was born in Tehran in 1977 and won gold at the International Mathematical Olympiad twice in high school."],
+["او استاد~ دانشگاه~ استنفورد در آمریکا بود.","She was a professor at Stanford University in the United States."],
+["میرزاخانی در سال~ ۲۰۱۷، در چهل|سالگی، بر اثر~ بیماری~ سرطان درگذشت.","Mirzakhani died of cancer in 2017, at the age of forty."]
+], q:[
+["What made her Fields Medal special?","She was the first woman to win it","She was the youngest winner ever","She won it twice"],
+["Where was she a professor?","Stanford University","University of Tehran","Oxford University"]
+]},
+{id:"n10", lvl:3, news:"Feb 2012", fa:"اسکار برای «جدایی~ نادر از سیمین»", en:"An Iranian film wins an Oscar", s:[
+["فیلم~ «جدایی~ نادر از سیمین» به کارگردانی~ اصغر فرهادی، جایزه|ی اسکار~ بهترین فیلم~ خارجی|زبان را برد.","\"A Separation\", directed by Asghar Farhadi, won the Oscar for best foreign language film."],
+["این نخستین بار بود که یک فیلم~ ایرانی برنده|ی جایزه|ی اسکار می|شد.","It was the first time an Iranian film had won an Oscar."],
+["مراسم~ اسکار در اسفند~ ۱۳۹۰ در لس|آنجلس برگزار شد.","The Oscar ceremony was held in Los Angeles in February 2012."],
+["این فیلم پیش از آن جایزه|ی خرس~ طلای جشنواره|ی فیلم~ برلین را هم برده بود.","Before that, the film had also won the Golden Bear at the Berlin Film Festival."],
+["داستان~ فیلم درباره|ی زن و شوهری است که بر سر~ رفتن از ایران با هم اختلاف دارند.","The film is about a married couple who disagree about leaving Iran."],
+["اصغر فرهادی چند سال بعد با فیلم~ «فروشنده» دومین جایزه|ی اسکار~ خود را هم گرفت.","A few years later, Asghar Farhadi won his second Oscar with the film \"The Salesman\"."]
+], q:[
+["What had the film won before the Oscar?","The Golden Bear in Berlin","The Palme d'Or in Cannes","The Golden Lion in Venice"],
+["What is the film about?","A couple who disagree about leaving Iran","A football team on tour","A soldier coming home from war"]
+]},
+{id:"n11", lvl:3, news:"Apr 2024", fa:"خورشیدگرفتگی~ کامل در آمریکای شمالی", en:"A total solar eclipse over North America", s:[
+["روز~ ۲۰ فروردین~ ۱۴۰۳، خورشیدگرفتگی~ کامل در بخش|هایی از مکزیک، آمریکا و کانادا دیده شد.","On 8 April 2024, a total solar eclipse was seen in parts of Mexico, the United States and Canada."],
+["در خورشیدگرفتگی~ کامل، ماه دقیقاً از جلوی خورشید عبور می|کند و برای چند دقیقه هوا تاریک می|شود.","In a total eclipse, the Moon passes exactly in front of the Sun, and for a few minutes it gets dark."],
+["میلیون|ها نفر برای تماشای این پدیده به مسیر~ خورشیدگرفتگی سفر کردند.","Millions of people traveled to the eclipse's path to watch it."],
+["طولانی|ترین تاریکی~ کامل حدود~ چهار و نیم دقیقه طول کشید.","The longest total darkness lasted about four and a half minutes."],
+["کارشناسان هشدار دادند که نگاه کردن~ مستقیم به خورشید بدون~ عینک~ مخصوص به چشم آسیب می|زند.","Experts warned that looking straight at the Sun without special glasses damages the eyes."],
+["خورشیدگرفتگی~ کامل~ قبلی در آمریکا در سال~ ۲۰۱۷ رخ داده بود.","The previous total solar eclipse in the United States had been in 2017."]
+], q:[
+["How long did the longest total darkness last?","About four and a half minutes","About one hour","About ten seconds"],
+["What did experts warn about?","Looking at the Sun without special glasses","Driving at night","The cold weather"]
+]},
+{id:"n12", lvl:3, news:"Dec 2022", fa:"ثبت~ شب~ یلدا در یونسکو", en:"UNESCO lists Yalda night", s:[
+["یونسکو در آذر~ ۱۴۰۱ شب~ یلدا را در فهرست~ میراث~ فرهنگی~ ناملموس~ بشر ثبت کرد.","In late 2022, UNESCO added Yalda night to its list of the Intangible Cultural Heritage of Humanity."],
+["این پرونده به|طور~ مشترک از سوی ایران و افغانستان به یونسکو ارائه شده بود.","The nomination had been submitted to UNESCO jointly by Iran and Afghanistan."],
+["شب~ یلدا، طولانی|ترین شب~ سال، در پایان~ پاییز و آغاز~ زمستان جشن گرفته می|شود.","Yalda, the longest night of the year, is celebrated at the end of autumn and the start of winter."],
+["خانواده|ها در این شب دور~ هم جمع می|شوند، انار و هندوانه می|خورند و فال~ حافظ می|گیرند.","On this night families get together, eat pomegranates and watermelon, and read a Hafez fortune."],
+["نوروز نیز پیش|تر، در سال~ ۲۰۰۹، در همین فهرست ثبت شده بود.","Nowruz had already been added to the same list, in 2009."]
+], q:[
+["Which countries submitted Yalda together?","Iran and Afghanistan","Iran and Turkey","Iran and Iraq"],
+["Which celebration was listed earlier, in 2009?","Nowruz","Chaharshanbe Suri","Sizdah Bedar"]
+]},
+{id:"n13", lvl:3, news:"Apr 2019", fa:"نخستین تصویر~ یک سیاه|چاله", en:"The first picture of a black hole", s:[
+["دانشمندان روز~ ۲۱ فروردین~ ۱۳۹۸ نخستین تصویر~ واقعی از یک سیاه|چاله را منتشر کردند.","On 10 April 2019, scientists released the first real picture of a black hole."],
+["این تصویر با همکاری~ هشت رادیوتلسکوپ در نقاط~ مختلف~ جهان ثبت شد.","The picture was made by eight radio telescopes working together in different parts of the world."],
+["این سیاه|چاله در مرکز~ کهکشانی به نام~ ام ۸۷ قرار دارد و ۵۵ میلیون سال~ نوری با زمین فاصله دارد.","The black hole is at the center of a galaxy called M87, 55 million light-years from Earth."],
+["جرم~ آن حدود~ شش و نیم میلیارد برابر~ جرم~ خورشید است.","Its mass is about six and a half billion times the mass of the Sun."],
+["در این تصویر، حلقه|ای نارنجی از نور دور~ یک سایه|ی تاریک دیده می|شود.","The picture shows an orange ring of light around a dark shadow."]
+], q:[
+["How many radio telescopes worked together?","Eight","Two","Forty"],
+["How far away is the black hole?","55 million light-years","55 light-years","5 billion light-years"]
+]},
+{id:"n14", lvl:3, news:"Sep 2006", fa:"سفر~ انوشه انصاری به فضا", en:"Anousheh Ansari goes to space", s:[
+["انوشه انصاری، کارآفرین~ ایرانی|آمریکایی، روز~ ۲۷ شهریور~ ۱۳۸۵ به فضا سفر کرد.","On 18 September 2006, the Iranian-American entrepreneur Anousheh Ansari traveled to space."],
+["او نخستین زن~ گردشگر~ فضا و نخستین ایرانی|تباری بود که به فضا رفت.","She was the first female space tourist and the first person of Iranian descent to go to space."],
+["انصاری با فضاپیمای روسی~ سایوز از پایگاه~ بایکونور در قزاقستان پرتاب شد.","Ansari launched on the Russian Soyuz spacecraft from the Baikonur base in Kazakhstan."],
+["او حدود~ هشت روز در ایستگاه~ فضایی~ بین|المللی ماند و در وبلاگش از زندگی در فضا نوشت.","She spent about eight days on the International Space Station and wrote about life in space on her blog."],
+["انصاری کودکی|اش را در تهران گذراند و در نوجوانی به آمریکا مهاجرت کرد.","Ansari spent her childhood in Tehran and moved to the United States as a teenager."]
+], q:[
+["What was special about her trip?","She was the first female space tourist","She was the first person on the Moon","She was the first European astronaut"],
+["Where did she launch from?","Baikonur in Kazakhstan","Florida","French Guiana"]
+]},
+{id:"n15", lvl:3, news:"Jul 2024", fa:"المپیک~ ۲۰۲۴ پاریس", en:"The Paris 2024 Olympics", s:[
+["بازی|های المپیک~ ۲۰۲۴ از ۵ تا ۲۱ مرداد~ ۱۴۰۳ در پاریس برگزار شد.","The 2024 Olympic Games were held in Paris from 26 July to 11 August 2024."],
+["مراسم~ افتتاحیه برای نخستین بار نه در یک ورزشگاه، بلکه روی~ رود~ سن برگزار شد.","For the first time, the opening ceremony took place not in a stadium but on the river Seine."],
+["ورزشکاران با قایق از روی~ رودخانه رژه رفتند.","The athletes paraded along the river on boats."],
+["پاریس پس از سال|های ۱۹۰۰ و ۱۹۲۴، برای سومین بار میزبان~ المپیک بود.","After 1900 and 1924, it was the third time Paris had hosted the Olympics."],
+["ورزشکاران~ ایرانی در رشته|های کشتی و تکواندو مدال گرفتند.","Iranian athletes won medals in wrestling and taekwondo."]
+], q:[
+["What was new about the opening ceremony?","It took place on the river Seine","It was held in the morning","It had no athletes"],
+["How many times has Paris hosted the Olympics?","Three times","Once","Five times"]
+]}
+];
+
+// ---- data_audio.js ----
+// Listening audio: one AAC file with every sentence; t = start and end (seconds) of each sentence. Generated by tools/build_audio.sh.
+const AUDIO = {"file":"listen-f85d5642.mp4","order":["t1","t2","t3","t4","t5","t6","t7","t8","t9","n1","n2","n3","n4","n5","n6","n7","r1","r7","st1","st2","st3","st4","st5","la1","la4","la2","la3","n8","n9","n10","n11","n12","n13","n14","n15"],"t":{"t1":[[0.25,5.485],[5.935,12.36],[12.81,18.348],[18.798,22.829],[23.279,27.726]],"t2":[[28.176,31.996],[32.446,36.373],[36.823,41.026],[41.476,45.818],[46.268,51.396]],"t3":[[51.846,54.716],[55.166,60.484],[60.934,65.601],[66.051,72.161],[72.611,75.418]],"t4":[[75.868,80.605],[81.055,84.805],[85.255,92.592],[93.042,99.019],[99.469,104.305]],"t5":[[104.755,108.767],[109.217,116.032],[116.482,122.023],[122.473,129.118],[129.568,133.773]],"t6":[[134.223,138.147],[138.597,143.274],[143.724,149.668],[150.118,157.227],[157.677,162.235]],"t7":[[162.685,166.868],[167.318,172.531],[172.981,177.676],[178.126,182.262],[182.712,187.348]],"t8":[[187.798,191.211],[191.661,195.888],[196.338,201.477],[201.927,208.923],[209.373,212.798]],"t9":[[213.248,218.251],[218.701,224.894],[225.344,230.376],[230.826,237.964],[238.414,242.621]],"n1":[[243.071,249.143],[249.593,257.267],[257.717,264.42],[264.87,276.086],[276.536,281.632]],"n2":[[282.082,289.365],[289.815,296.223],[296.673,301.879],[302.329,308.947],[309.397,315.009]],"n3":[[315.459,323.749],[324.199,328.692],[329.142,335.957],[336.407,341.454],[341.904,348.208]],"n4":[[348.658,353.046],[353.496,358.822],[359.272,364.6],[365.05,371.744],[372.194,376.075]],"n5":[[376.525,381.494],[381.944,386.794],[387.244,392.596],[393.046,398.491],[398.941,404.421]],"n6":[[404.871,411.64],[412.09,418.011],[418.461,424.099],[424.549,428.141],[428.591,434.709]],"n7":[[435.159,441.066],[441.516,448.618],[449.068,453.863],[454.313,460.246],[460.696,465.491]],"r1":[[465.941,468.739],[469.189,471.743],[472.193,476.797],[477.247,478.977],[479.427,484.616],[485.066,487.191],[487.641,491.077],[491.527,493.315]],"r7":[[493.765,496.285],[496.735,500.357],[500.807,504.511],[504.961,507.213],[507.663,510.949],[511.399,513.952],[514.402,516.097]],"st1":[[516.547,520.906],[521.356,527.056],[527.506,533.428],[533.878,537.637],[538.087,541.663],[542.113,545.335]],"st2":[[545.785,550.683],[551.133,556.347],[556.797,562.138],[562.588,567.243],[567.693,572.477],[572.927,577.088]],"st3":[[577.538,579.25],[579.7,584.193],[584.643,591.904],[592.354,599.486],[599.936,605.671],[606.121,609.836]],"st4":[[610.286,613.54],[613.99,619.586],[620.036,625.4],[625.85,630.924],[631.374,636.595],[637.045,642.831]],"st5":[[643.281,648.876],[649.326,652.158],[652.608,658.342],[658.792,662.856],[663.306,670.446],[670.896,678.511]],"la1":[[678.961,682.735],[683.185,686.518],[686.968,690.036],[690.486,693.402],[693.852,695.548]],"la4":[[695.998,697.96],[698.41,705.286],[705.736,709.428],[709.878,715.603]],"la2":[[716.053,723.413],[723.863,730.092],[730.542,733.321],[733.771,737.701],[738.151,741.39]],"la3":[[741.84,748.853],[749.303,753.204],[753.654,760.747],[761.197,765.315],[765.765,771.388]],"n8":[[771.838,780.155],[780.605,787.716],[788.166,795.252],[795.702,802.825],[803.275,808.558],[809.008,816.938]],"n9":[[817.388,827.395],[827.845,834.602],[835.052,841.082],[841.532,853.154],[853.604,857.188],[857.638,864.726]],"n10":[[865.176,874.808],[875.258,880.72],[881.17,887.195],[887.645,893.586],[894.036,900.352],[900.802,907.922]],"n11":[[908.372,917.854],[918.304,928.447],[928.897,935.382],[935.832,940.569],[941.019,949.32],[949.77,956.315]],"n12":[[956.765,965.379],[965.829,971.87],[972.32,979.506],[979.956,987.103],[987.553,993.399]],"n13":[[993.849,1004.142],[1004.592,1010.92],[1011.37,1020.969],[1021.419,1026.295],[1026.745,1032.105]],"n14":[[1032.555,1042.133],[1042.583,1048.527],[1048.977,1055.432],[1055.882,1063.41],[1063.86,1069.92]],"n15":[[1070.37,1078.973],[1079.423,1086.378],[1086.828,1090.609],[1091.059,1099.058],[1099.508,1105.011]]}};
+
 // ---- data_drills.js ----
 // Spelling: [correct, wrong, finglish, meaning, category, optional custom note]
 // For category "pair" both are real words: [correct, other real word, fin, meaning, "pair", otherFin, otherMeaning]
@@ -2518,6 +2687,58 @@ const LEX = [
 ["به|طور","be-towr","in a ... way"],["محسوسی","mahsoosi","noticeable"],
 ["محیط","mohit","surroundings, environment"],["زیست","zist","life, living"],["لباسشویی","lebasshooyi","washing clothes, laundry"],["زنگ","zang","bell; ring"],
 ["هوش","hoosh","intelligence"],["مصنوعی","masnooi","artificial"],["مادری","madari","mother's, mother (tongue)"],["این|ها","inha","these, these things"],
+// ---- listening: messages, announcements, forecast ----
+["ببخشید","bebakhshid","sorry, excuse me"],["نتونستم","natoonestam","I couldn't (spoken form of نتوانستم)"],["بیام","biam","(that I) come (spoken form of بیایم)"],
+["مامانم","mamanam","my mom"],["مریض","mariz","sick"],["پیشش","pishesh","with her or him (spoken)"],["می|موندم","mimoondam","I stayed, I'd stay (spoken form of می|ماندم)"],
+["اگه","age","if (spoken form of اگر)"],["بهم","beham","to me (spoken)"],["زنگ بزن","zang bezan","call (me)"],["پیام","payam","message"],["پیام بده","payam bede","send a message (spoken)"],
+["قربونت","ghorboonet","thanks, dear (a loving word)"],["خداحافظ","khodahafez","goodbye"],["محترم","mohtaram","respected, dear (formal)"],["سکو","sakkoo","platform"],
+["سمت","samt","direction, side"],["حرکت می|کند","harekat mikonad","moves, leaves"],["حرکت","harekat","movement"],["صندلی|های","sandali-ha-ye","the seats of"],
+["سالمندان","salmandan","the elderly"],["باردار","bardar","pregnant"],["واگذار کنید","vagozar konid","give, hand over (polite command)"],["کنید","konid","do (polite)"],
+["پیاده شدن","piade shodan","getting off"],["سوار شدن","savar shodan","getting on, boarding"],["پرواز","parvaz","flight"],["مقصد","maghsad","destination"],
+["توجه فرمایید","tavajjoh farmayid","attention please (formal)"],["توجه","tavajjoh","attention"],["به علت","be ellat","because of"],["نامساعد","namosa'ed","unfavorable, bad"],
+["جوی","javvi","atmospheric, of the weather"],["تأخیر","ta'khir","delay"],["انجام می|شود","anjam mishavad","takes place, is done"],["انجام خواهد شد","anjam khahad shod","will take place"],
+["درب","darb","door, gate (formal)"],["شکیبایی","shakibayi","patience"],["سپاسگزاریم","sepasgozarim","we thank you"],["سازمان","sazman","organization"],
+["سردتر","sardtar","colder"],["کاهش می|یابد","kahesh miyabad","decreases, drops"],["می|بارد","mibarad","(it) rains, falls"],["کوهستانی","koohestani","mountainous"],
+["احتمال","ehtemal","chance, possibility"],["وجود دارد","vojood darad","there is"],["همچنان","hamchenan","still, will continue to"],["خواهد بود","khahad bood","will be"],
+["رانندگان","ranandegan","drivers"],["توصیه کرده است","towsie karde ast","has advised"],["احتیاط","ehtiat","caution"],["رانندگی کنند","ranandegi konand","(that they) drive"],
+// ---- listening: news about real events ----
+["فضایی","fazayi","space (adjective), of space"],["تلسکوپ","teleskop","telescope"],["جیمز وب","jeymz veb","James Webb"],["بزرگ|ترین","bozorgtarin","the biggest, the largest"],
+["پرتاب شد","partab shod","was launched"],["پرتاب","partab","launch"],["موشک","mooshak","rocket"],["آریان","ariane","Ariane (a rocket)"],["گویان","guyan","Guiana"],
+["فرانسه","faranse","France"],["آمریکای جنوبی","amrika-ye jonoobi","South America"],["آمریکای شمالی","amrika-ye shomali","North America"],["آمریکا","amrika","America, the United States"],
+["رفت","raft","went"],["حاصل","hasel","result, product"],["همکاری","hamkari","cooperation"],["ناسا","nasa","NASA"],["آژانس","azhans","agency"],["اروپا","oroopa","Europe"],
+["کانادا","kanada","Canada"],["قطعه|ی","ghet'e-ye","piece (of)"],["قطعه","ghet'e","piece"],["شش|ضلعی","shesh-zel'i","hexagonal"],["ساخته شده","sakhte shode","is made, has been made"],
+["قطر","ghotr","diameter, width"],["نیم","nim","half"],["متر","metr","meter"],["کیلومتری","kilometri","at ... kilometers"],["تصاویر","tasavir","images, pictures"],["رنگی","rangi","color, in color"],
+["منتشر شد","montasher shod","was released, was published"],["منتشر کردند","montasher kardand","(they) released, published"],["شگفت|زده کرد","shegeft-zade kard","amazed"],
+["میرزاخانی","mirzakhani","Mirzakhani (a family name)"],["ریاضی|دان","riazidan","mathematician"],["زنی","zani","a woman (who)"],["مدال","medal","medal"],["فیلدز","fildz","Fields (the Fields Medal)"],
+["دریافت کرد","daryaft kard","received"],["اغلب","aghlab","often"],["ریاضیات","riaziat","mathematics"],["می|نامند","minamand","(they) call, name"],["بار","bar","time (as in twice); load"],
+["کنگره|ی","kongere-ye","the congress of"],["بین|المللی","beynolmelali","international"],["ریاضی|دانان","riazidanan","mathematicians"],["سئول","seul","Seoul"],
+["دوران","dowran","period, years"],["دبیرستان","dabirestan","high school"],["المپیاد","olampiad","olympiad"],["جهانی","jahani","world (adjective), global"],["ریاضی","riazi","math"],
+["طلا","tala","gold"],["گرفت","gereft","got, took, won"],["استنفورد","estanford","Stanford"],["چهل|سالگی","chehel-salegi","the age of forty"],["بر اثر","bar asar","as a result of"],
+["سرطان","saratan","cancer"],["درگذشت","dargozasht","passed away"],["اسکار","oskar","Oscar"],["نادر","nader","Nader (a name)"],["سیمین","simin","Simin (a name)"],
+["به کارگردانی","be kargardani","directed by"],["اصغر","asghar","Asghar (a name)"],["فرهادی","farhadi","Farhadi (a family name)"],["بهترین","behtarin","the best"],
+["خارجی|زبان","khareji-zaban","foreign-language"],["برد","bord","won; took"],["برنده|ی","barande-ye","the winner of"],["می|شد","mishod","became, would become"],
+["لس|آنجلس","los-anjeles","Los Angeles"],["برگزار شد","bargozar shod","was held"],["خرس","khers","bear"],["جشنواره|ی","jashnvare-ye","the festival of"],["جشنواره","jashnvare","festival"],
+["برلین","berlin","Berlin"],["برده بود","borde bood","had won"],["زن و شوهری","zan-o shohari","a married couple"],["زن","zan","woman; wife"],["دومین","dovvomin","the second"],
+["خورشیدگرفتگی","khorshid-gereftegi","solar eclipse"],["کامل","kamel","complete, total"],["بخش|هایی","bakhsh-hayi","parts"],["مکزیک","mekzik","Mexico"],["دیده شد","dide shod","was seen"],
+["دقیقاً","daghighan","exactly"],["عبور می|کند","obur mikonad","passes"],["میلیون|ها","milyoon-ha","millions"],["نفر","nafar","person, people"],["تماشا","tamasha","watching"],
+["پدیده","padide","phenomenon"],["مسیر","masir","path, route"],["سفر کردند","safar kardand","(they) traveled"],["تاریکی","tariki","darkness"],["طول کشید","tool keshid","lasted"],
+["هشدار دادند","hoshdar dadand","(they) warned"],["نگاه کردن","negah kardan","looking"],["مخصوص","makhsoos","special"],["بعدی","ba'di","next"],["رخ خواهد داد","rokh khahad dad","will happen"],["رخ داده بود","rokh dade bud","had happened"],["قبلی","ghabli","previous, the one before"],
+["یونسکو","yunesko","UNESCO"],["ثبت کرد","sabt kard","registered, listed"],["ثبت شد","sabt shod","was recorded"],["ثبت شده بود","sabt shode bood","had been listed"],["ثبت","sabt","registration"],
+["فهرست","fehrest","list"],["فرهنگی","farhangi","cultural"],["ناملموس","namalmoos","intangible"],["بشر","bashar","humanity"],["پرونده","parvande","file, nomination"],
+["مشترک","moshtarak","joint, shared"],["از سوی","az su-ye","by, on behalf of"],["افغانستان","afghanestan","Afghanistan"],["ارائه شده بود","era'e shode bood","had been submitted"],
+["پایان","payan","end"],["جشن گرفته می|شود","jashn gerefte mishavad","is celebrated"],["پیش|تر","pishtar","earlier, before that"],["همین","hamin","this same, the same"],
+["سیاه|چاله","siahchale","black hole"],["تصویر","tasvir","picture, image"],["واقعی","vaghei","real"],["رادیوتلسکوپ","radioteleskop","radio telescope"],["نقاط","noghat","points, places"],
+["مختلف","mokhtalef","different, various"],["مرکز","markaz","center"],["کهکشانی","kahkeshani","a galaxy (that)"],["به نام","be nam","called, named; in the name of"],["نه","na","no, not"],["ام","em","M (the letter)"],
+["سال نوری","sal-e noori","light-year(s)"],["فاصله دارد","fasele darad","is ... away"],["فاصله|ی","fasele-ye","the distance of, the gap"],["فاصله","fasele","distance"],["جرم","jerm","mass"],
+["برابر","barabar","times (as in ten times); equal"],["حلقه|ای","halghe-i","a ring"],["نارنجی","narenji","orange (color)"],["نور","noor","light"],
+["انوشه","anooshe","Anousheh (a name)"],["انصاری","ansari","Ansari (a family name)"],["کارآفرین","karafarin","entrepreneur"],["ایرانی|آمریکایی","irani-amrikayi","Iranian-American"],
+["گردشگر","gardeshgar","tourist"],["ایرانی|تباری","irani-tabari","a person of Iranian descent"],["فضاپیما","fazapeyma","spacecraft"],["روسی","roosi","Russian"],["سایوز","soyuz","Soyuz"],
+["پایگاه","paygah","base"],["بایکونور","baykonur","Baikonur"],["قزاقستان","ghazzaghestan","Kazakhstan"],["ماند","mand","stayed"],["وبلاگش","veblagash","his or her blog"],
+["نوشت","nevesht","wrote"],["کودکی|اش","koodaki-ash","his or her childhood"],["گذراند","gozarand","spent (time)"],["نوجوانی","nowjavani","the teenage years"],
+["بازی|های","bazi-ha-ye","the games of"],["المپیک","olampik","the Olympics"],["افتتاحیه","eftetahiye","opening (ceremony)"],["ورزشگاه","varzeshgah","stadium"],["بلکه","balke","but rather"],
+["رود سن","rood-e sen","the river Seine"],["سن","sen","the Seine (river); also senn: age"],["رود","rood","river"],["ورزشکاران","varzeshkaran","athletes"],["قایق","ghayegh","boat"],["رژه رفتند","rezhe raftand","(they) paraded"],
+["سومین","sevvomin","the third"],["میزبان","mizban","host"],["رشته|های","reshte-ha-ye","the fields of, the sports of"],["کشتی","koshti","wrestling (also keshti: ship)"],
+["تکواندو","tekvando","taekwondo"],["شماره|ی","shomare-ye","number (of)"],["قرار دارد","gharar darad","is located, sits"],["بر سر","bar sar","over, about (a disagreement)"],["پیش از","pish az","before"],["شماره","shomare","number"],["پاریس","paris","Paris"],["مدال گرفتند","medal gereftand","(they) won medals"],["کردند","kardand","(they) did"],["دیده","dide","seen"],["تجریش","tajrish","Tajrish (a district and metro station in north Tehran)"],
 // ---- poetry ----
 ["بنی|آدم","bani-adam","human beings"],["اعضای","a'za-ye","members (of)"],["پیکرند","peykar-and","are (one) body"],
 ["ز","ze","from (poetic)"],["گوهرند","gohar-and","are (one) essence"],["چو","cho","when (poetic)"],["عضوی","ozvi","a member, a limb"],
@@ -2534,7 +2755,7 @@ const LEX = [
 "use strict";
 // ================= data prep =================
 const DECKS_ = Z(DECKS).map(d => ({ ...d, w: d.w.map(([fa, fin, en, parts]) => ({ fa, fin, en, parts, deck: d.id })) }));
-const POEMS_ = Z(POEMS), ROOTS_ = Z(ROOTS), TEXTS_ = Z([...TEXTS, ...REAL, ...STORY]), SPELL_ = Z(SPELL), HOMO_ = Z(HOMO), PROV_ = Z(PROV), PARTS_ = Z(PARTS), CATS_ = Z(SPELL_CATS);
+const POEMS_ = Z(POEMS), ROOTS_ = Z(ROOTS), TEXTS_ = Z([...TEXTS, ...REAL, ...STORY, ...LISTEN]), SPELL_ = Z(SPELL), HOMO_ = Z(HOMO), PROV_ = Z(PROV), PARTS_ = Z(PARTS), CATS_ = Z(SPELL_CATS);
 const { LX, WORD } = buildLexicon(DECKS_, Z(LEX));
 const DECK = {}; DECKS_.forEach(d => DECK[d.id] = d);
 const ALLW = DECKS_.flatMap(d => d.w);
@@ -2578,13 +2799,13 @@ const latinP = s => String(s || "").replace(/،/g, ",").replace(/؛/g, ";").repl
 // ================= storage =================
 const KEY = "farsi-practice-v1";
 function defaults() {
-  return { v: 2, w: {}, my: [], myw: {}, xp: 0, log: {}, reads: [], typing: [], tbest: {}, tdone: {}, best: {}, sp: null, deck: null, miss: {}, fixed: 0, wod: null,
-    day: { date: today(), nw: 0 }, set: { size: 1, ez: true, nw: 10, goal: 60, theme: "auto", sound: true, remind: false, rtime: "19:00", rcal: false, rfont: "fa" }, tab: "today", since: today() };
+  return { v: 2, w: {}, my: [], myw: {}, xp: 0, log: {}, reads: [], typing: [], tbest: {}, tdone: {}, best: {}, sp: null, deck: null, miss: {}, fixed: 0, wod: null, ldone: {},
+    day: { date: today(), nw: 0 }, set: { size: 1, ez: true, nw: 10, goal: 60, theme: "auto", sound: true, remind: false, rtime: "19:00", rcal: false, rfont: "fa", lrate: 1 }, tab: "today", since: today() };
 }
 function mergeState(p) {
   const d = defaults(), o = Object.assign(d, p);
   o.set = Object.assign(defaults().set, p.set || {}); o.day = Object.assign({ date: "", nw: 0 }, p.day || {});
-  for (const k of ["w", "myw", "log", "tbest", "tdone", "best", "miss"]) o[k] = p[k] || {};
+  for (const k of ["w", "myw", "log", "tbest", "tdone", "best", "miss", "ldone"]) o[k] = p[k] || {};
   o.my = p.my || []; o.reads = p.reads || []; o.typing = p.typing || []; o.v = 2; return o;
 }
 let S = defaults(), canSave = true;
@@ -2795,10 +3016,11 @@ const DRILLS = {
   num: { fa: "۱۲۳", t: "Numbers & dates", d: "Prices, phone numbers, times and dates, the way they're written." },
   ezafe: { fa: "کتابِ من", t: "Ezafe", d: "Spot the words that take the hidden -e." },
   spoken: { fa: "گفتار", t: "Spoken vs written", d: "khoone or خانه? Match what you say to what's written." },
-  fonts: { fa: "خط", t: "Other fonts", d: "Read words in calligraphy, poster and Kufi styles." }
+  fonts: { fa: "خط", t: "Other fonts", d: "Read words in calligraphy, poster and Kufi styles." },
+  listen: { fa: "گوش کن", t: "Quick listen", d: "Hear a sentence, pick what it means." }
 };
 for (const k in DRILLS) DRILLS[k].fa = Z(DRILLS[k].fa);
-const todayDrill = () => ["spell", "num", "homo", "spoken", "build", "ezafe", "race", "fonts", "prov", "pair", "poet"][dayNum() % 11];
+const todayDrill = () => ["spell", "num", "listen", "homo", "spoken", "build", "ezafe", "race", "fonts", "prov", "pair", "poet"][dayNum() % 12];
 
 // ================= views: tabs =================
 function vToday() {
@@ -2813,6 +3035,8 @@ function vToday() {
       t1: left ? `Learn ${Math.min(left, unseenInDeck)} new words` : "New words done", t2: left ? "From " + d.en : `${S.day.nw} new words today`, go: left ? "Start" : "Done" },
     { act: "openText", id: nt.id, tag: "متن", done: (L.read || 0) > 0,
       t1: (S.tdone[nt.id] ? "Read again: " : "Read: ") + nt.en, t2: part("read", (L.read || 0) > 0, S.tdone[nt.id] ? "Try to beat your speed" : `Level ${nt.lvl}, ${wordCount(nt)} words`), go: (L.read || 0) > 0 ? "Done" : "Open" },
+    (() => { const nl = nextListen(), tl = TEXTS_.find(x => x.id === nl), dn = (L.listen || 0) > 0;
+      return { act: "openListen", id: nl, tag: "گوش", done: dn, t1: "Listen: " + tl.en, t2: part("listen", dn, `${fmtClock(textDur(nl))} of audio, ${tl.news ? "news" : "level " + tl.lvl}`), go: dn ? "Done" : "Play" }; })(),
     { act: "drill", id: dk, tag: "تمرین", done: (L.drill || 0) > 0, t1: dr.t, t2: part("drill", (L.drill || 0) > 0, dr.d), go: (L.drill || 0) > 0 ? "Done" : "Play" },
     { act: "typeStart", id: todayType(), tag: "تایپ", done: (L.type || 0) > 0, t1: "Typing: " + TMODES[todayType()].t, t2: part("type", (L.type || 0) > 0, TMODES[todayType()].d), go: (L.type || 0) > 0 ? "Done" : "Type" }
   ];
@@ -2931,7 +3155,7 @@ function vRead() {
 
 function vDrills() {
   const best = k => S.best[k] != null ? `Best: ${S.best[k]}` : "Not played yet";
-  const bestKey = { spell: "sp_all", pair: "sp_pair", homo: "homo", build: "build", race: "race", prov: "prov", poet: "poet", num: "num", ezafe: "ezafe", spoken: "spoken", fonts: "fonts" };
+  const bestKey = { spell: "sp_all", pair: "sp_pair", homo: "homo", build: "build", race: "race", prov: "prov", poet: "poet", num: "num", ezafe: "ezafe", spoken: "spoken", fonts: "fonts", listen: "listen" };
   return `<h1>Drills</h1><p class="sub">Short games that target the exact spots where heritage readers slip.</p>
   <div class="dgrid">${Object.keys(DRILLS).map(k => { const d = DRILLS[k];
     return `<button class="dcard" data-act="drill" data-id="${k}"><span class="dfa">${esc(d.fa)}</span><span class="dt">${d.t}</span><span class="dd">${d.d}</span><span class="db">${best(bestKey[k])}</span></button>`; }).join("")}</div>`;
@@ -2968,7 +3192,7 @@ function vMore() {
     <div class="btn-row"><button class="btn" data-act="importCode">Restore</button></div></div>
   <h2>About</h2>
   <div class="panel small"><p style="margin:0 0 8px">Built for heritage speakers: people who speak Persian fluently but read it slowly. Everything works offline once it has loaded, and nothing you do here leaves your device.</p>
-    <p class="muted" style="margin:0 0 12px">${ALLW.length} words, ${TEXTS_.length} texts, ${SPELL_.length} spelling traps, ${HOMO_.length} homographs, ${PROV_.length} proverbs, ${SPOKEN_.length} spoken forms. Practicing since ${esc(S.since)}.</p>
+    <p class="muted" style="margin:0 0 12px">${ALLW.length} words, ${TEXTS_.length} texts, ${SPELL_.length} spelling traps, ${HOMO_.length} homographs, ${PROV_.length} proverbs, ${SPOKEN_.length} spoken forms, ${Math.round(AUDIO.t ? Object.values(AUDIO.t).reduce((a, v) => a + v.length, 0) : 0)} recorded sentences. Practicing since ${esc(S.since)}.</p>
     <button class="btn danger full" data-act="reset">${RESET_ARM > Date.now() ? "Tap again to erase everything" : "Reset all progress"}</button></div>`;
 }
 function exportCode() { try { return "FARSI1:" + btoa(unescape(encodeURIComponent(JSON.stringify(S)))); } catch (e) { return ""; } }
@@ -2985,13 +3209,13 @@ function drawSheet() {
   const right = SHEET.kind === "session" && SES && SES.c ? `<span class="muted small">${SES.i + 1} / ${SES.q.length}</span>`
     : SHEET.kind === "reader" && RD && RD.started > 0 && RD.secs == null ? `<span class="timer" id="rtime">${fmtSecs((Date.now() - RD.started) / 1000)}</span>`
     : SHEET.kind === "race" && DR && DR.end && !DR.over ? `<span class="timer" id="racet">${Math.max(0, Math.ceil((DR.end - Date.now()) / 1000))}s</span>` : "";
-  const snd = ["session", "spell", "homo", "race", "prov", "poet", "type", "reader", "num", "ezafe", "spoken", "fonts"].includes(SHEET.kind) ? soundBtn() : "";
+  const snd = ["session", "spell", "homo", "race", "prov", "poet", "type", "reader", "num", "ezafe", "spoken", "fonts", "listen", "qlisten"].includes(SHEET.kind) ? soundBtn() : "";
   $("#sheet").innerHTML = `<div class="sheet-head"><button class="x" data-act="close" aria-label="Close">✕</button><div class="title">${esc(SHEET.title || "")}</div>${right}${snd}</div>
   <div class="sheet-body">${SHEETS[SHEET.kind]()}</div>`;
 }
 function stopTimer() { if (TIMER) { clearInterval(TIMER); TIMER = null; } }
 function closeSheet() {
-  stopTimer(); hideGloss(); SHEET = null; SES = null; RD = null; DR = null; DS = null; TY = null;
+  stopTimer(); hideGloss(); apStop(); SHEET = null; SES = null; RD = null; DR = null; DS = null; TY = null; LS = null;
   $("#sheet").classList.remove("on"); $("#sheet").innerHTML = ""; document.documentElement.classList.remove("lock"); render();
 }
 const fmtSecs = s => s < 60 ? s.toFixed(0) + "s" : Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
@@ -3149,7 +3373,7 @@ SHEETS.reader = () => {
     const b = S.tbest[t.id];
     after = (RD.wpm ? `<div class="result"><div class="panel"><b>${RD.wpm}</b><span class="muted small">words per minute</span></div><div class="panel"><b>${fmtSecs(RD.secs)}</b><span class="muted small">${b && b > RD.wpm ? `best is ${b} wpm` : "your best so far"}</span></div></div>` : "")
       + `<div class="btn-row"><button class="btn" data-act="rtr">${RD.tr ? "Hide translation" : "Show Finglish and English"}</button></div>`;
-    if (t.q && t.q.length) after += `<div class="qbox">${t.q.map((q, qi) => `<h3>${esc(q[0])}</h3><div class="opts en-opts">${RD.qopts[qi].map((o, oi) => {
+    if (t.q && t.q.length) after += `<div class="qbox">${t.q.map((q, qi) => `<h3>${qText(q[0])}</h3><div class="opts en-opts">${RD.qopts[qi].map((o, oi) => {
         const a = RD.ans[qi], cls = a == null ? "" : o === q[1] ? "ok" : oi === a ? "bad" : "dim";
         return `<button class="opt ${cls}" data-act="rq" data-q="${qi}" data-o="${oi}" ${a != null ? "disabled" : ""}>${esc(o)}</button>`; }).join("")}</div>`).join("")}</div>`;
     const allAns = !t.q || t.q.every((_, qi) => RD.ans[qi] != null);
@@ -3157,7 +3381,7 @@ SHEETS.reader = () => {
       t.next ? `<button class="btn primary full" data-act="openText" data-id="${t.next}">Next chapter</button>` : t.grp === "story" ? `<p class="muted small">That's the end of the story.</p><button class="btn primary full" data-act="nextText">Next text</button>` : `<button class="btn primary full" data-act="nextText">Next text</button>`);
     else after += `<div class="btn-row"><button class="btn primary full" data-act="rfinish" ${allAns ? "" : "disabled"}>${allAns ? "Finish" : "Answer the questions to finish"}</button></div>`;
   }
-  const chip = locked ? "<span></span>" : `<span class="rchips"><button class="chip sm ${RD.tr ? "on" : ""}" data-act="rtr">${RD.secs != null ? "Finglish + English" : "Finglish"}</button><button class="chip sm" data-act="rfont" aria-label="Change the font">Aa ${FONT_NAMES[S.set.rfont] ? FONT_NAMES[S.set.rfont].split(" ")[0] : "Modern"}</button></span>`;
+  const chip = locked ? "<span></span>" : `<span class="rchips"><button class="chip sm ${RD.tr ? "on" : ""}" data-act="rtr">${RD.secs != null ? "Finglish + English" : "Finglish"}</button>${AUDIO.t[t.id] ? `<button class="chip sm" data-act="openListen" data-id="${t.id}">Listen</button>` : ""}<button class="chip sm" data-act="rfont" aria-label="Change the font">Aa ${FONT_NAMES[S.set.rfont] ? FONT_NAMES[S.set.rfont].split(" ")[0] : "Modern"}</button></span>`;
   const ff = S.set.rfont && S.set.rfont !== "fa" ? "ff-" + S.set.rfont : "";
   return `<p class="rtitle">${esc(faShow(t.fa))}</p><div class="rmeta">${chip}<span class="rmr"><span>Level ${t.lvl}</span><span>${RD.wc} words</span></span></div>
   <div class="rtext ${poem ? "poem" : ""} ${t.kind ? "k-" + t.kind : ""} ${ff} ${locked ? "locked" : ""}">${body}${lock}</div>
@@ -3373,9 +3597,11 @@ function startDrill(k) {
   if (k === "ezafe") DR = { kind: k, items: shuffle(ezItems()).slice(0, 8), i: 0, score: 0, sel: new Set(), checked: false, logged: false };
   if (k === "spoken") DR = { kind: k, items: spokenItems(), i: 0, score: 0, ans: null, logged: false };
   if (k === "fonts") DR = { kind: k, items: fontItems(), i: 0, score: 0, ans: null, logged: false };
+  if (k === "listen") { apStop(); apLoad(); DR = { kind: k, items: qlItems(), i: 0, score: 0, ans: null, started: false, logged: false }; }
   if (k === "race") { let pool = ALLW.filter(w => seen(w.fa)); if (pool.length < 12) pool = ALLW.filter(w => DECK[w.deck].lvl <= 2);
     DR = { kind: k, pool, score: 0, miss: 0, missed: [], end: 0, over: false, q: null, logged: false }; }
-  if (SHEET) { SHEET.kind = k; SHEET.title = title; drawSheet(); topScroll(); } else openSheet(k, title);
+  const sk = k === "listen" ? "qlisten" : k;
+  if (SHEET) { SHEET.kind = sk; SHEET.title = title; drawSheet(); topScroll(); } else openSheet(sk, title);
 }
 function drillDone(key, score) {
   if (DR.logged) return; DR.logged = true;
@@ -3386,7 +3612,7 @@ function drillDone(key, score) {
 // ================= main render =================
 function render() {
   rollDay();
-  const v = { today: vToday, words: vWords, read: vRead, type: vType, drills: vDrills, more: vMore }[S.tab] || vToday;
+  const v = { today: vToday, words: vWords, read: vRead, listen: vListen, type: vType, drills: vDrills, more: vMore }[S.tab] || vToday;
   $("#view").innerHTML = `<div class="lionbar">${lionSVG()}</div>` + v();
   document.querySelectorAll("nav.tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === S.tab));
 }
@@ -3485,6 +3711,27 @@ const ACT = {
     else { DR.miss++; if (!DR.missed.some(x => x.fa === DR.q.w.fa)) DR.missed.push(DR.q.w); markMiss("mean", DR.q.w.fa, { fin: DR.q.w.fin, en: DR.q.w.en }); sfx("soft"); } DR.flash = { i, c: ok ? "ok" : "bad" }; drawSheet();
     setTimeout(() => { if (DR && !DR.over) { raceQ(); drawSheet(); } }, ok ? 220 : 650); },
   nbans: el => nbAnswer(+el.dataset.i),
+  openListen: el => { const id = el.dataset.id; closeIfOpen(); openListen(id); },
+  lplay: () => { if (!LS) return; if (apBusy()) { apStop(); LS.playingAll = false; const y = $("#sheet").scrollTop; drawSheet(); $("#sheet").scrollTop = y; }
+    else lsPlayFrom(LS.cur >= LS.times.length - 1 && LS.heard.has(LS.cur) ? 0 : LS.cur, true); },
+  lrep: () => LS && lsPlayFrom(LS.cur, false),
+  lprev: () => LS && lsPlayFrom(Math.max(0, LS.cur - 1), false),
+  lnext: () => LS && lsPlayFrom(Math.min(LS.times.length - 1, LS.cur + 1), false),
+  lsent: el => LS && lsPlayFrom(+el.dataset.i, false),
+  ltog: el => { LS[el.dataset.k] = !LS[el.dataset.k]; const y = $("#sheet").scrollTop; drawSheet(); $("#sheet").scrollTop = y; },
+  lrate: el => { S.set.lrate = +el.dataset.v; save(); if (AP.el) AP.el.playbackRate = S.set.lrate; const y = $("#sheet").scrollTop; drawSheet(); $("#sheet").scrollTop = y; },
+  lq: el => { const qi = +el.dataset.q; if (LS.ans[qi] != null) return; LS.ans[qi] = +el.dataset.o;
+    const ok = LS.qopts[qi][LS.ans[qi]] === LS.t.q[qi][1]; if (ok) { LS.xp += 5; addXP(5, null, "listen"); }
+    sfx(ok ? "right" : "wrong"); const y = $("#sheet").scrollTop; drawSheet(); $("#sheet").scrollTop = y; },
+  lfinish: () => { const t = LS.t; LS.qRight = (t.q || []).filter((q, qi) => LS.qopts[qi][LS.ans[qi]] === q[1]).length; LS.finished = true;
+    lsAward(); if (!LS.base) { S.ldone[LS.id] = S.ldone[LS.id] || today(); addXP(0, "listen"); } sfx("done"); drawSheet();
+    setTimeout(() => { const sh = $("#sheet"); sh.scrollTop = sh.scrollHeight; }, 30); },
+  lretry: () => { apReset(); apLoad(); drawSheet(); },
+  qlgo: () => { DR.started = true; drawSheet(); qlPlay(); drawSheet(); },
+  qlplay: () => { if (apBusy()) apStop(); else qlPlay(); drawSheet(); },
+  qlans: el => { if (DR.ans != null) return; DR.ans = +el.dataset.i; const it = DR.items[DR.i];
+    if (it.opts[DR.ans] === it.en) { DR.score++; addXP(2, null, "drill"); sfx("right"); } else sfx("wrong"); drawSheet(); },
+  qlnext: () => { DR.i++; DR.ans = null; apStop(); if (DR.i >= DR.items.length) { drillDone("listen", DR.score); drawSheet(); } else { drawSheet(); qlPlay(); drawSheet(); } topScroll(); },
   nbfin: () => { if (SES && SES.c) { SES.c.fin = !SES.c.fin; drawSheet(); } },
   startMiss: () => startSession("miss"),
   nball: () => { NBALL = !NBALL; render(); },
@@ -3515,8 +3762,8 @@ const ACT = {
   reset: () => { if (RESET_ARM > Date.now()) { const keep = S.set; S = defaults(); S.set = keep; S.tab = "more"; save(); RESET_ARM = 0; render(); toast("Progress erased"); }
     else { RESET_ARM = Date.now() + 4000; render(); setTimeout(() => { if (RESET_ARM && RESET_ARM <= Date.now() && S.tab === "more" && !SHEET) render(); }, 4100); } }
 };
-function closeIfOpen() { if (SHEET) { stopTimer(); hideGloss(); SES = null; RD = null; DR = null; } }
-function closeIfSession() { if (SHEET) { stopTimer(); SES = null; DR = null; RD = null; } }
+function closeIfOpen() { if (SHEET) { stopTimer(); hideGloss(); apStop(); SES = null; RD = null; DR = null; LS = null; } }
+function closeIfSession() { if (SHEET) { stopTimer(); apStop(); SES = null; DR = null; RD = null; LS = null; } }
 
 document.addEventListener("click", e => {
   const el = e.target.closest("[data-act],[data-tab]"); if (!el || el.disabled) return;
@@ -3927,7 +4174,7 @@ function ezItems() {
     t.s.forEach(([fa, en, tag]) => {
       if (tag || fa.includes(" / ")) return;
       // keep set phrases whole, but split any phrase with an ezafe inside it so each linked word can be tapped
-      const toks = tokenize(LX, fa, ov).flatMap(tk => tk.words.length > 1 && tk.words.slice(0, -1).some(w => /~$|\u200cی$/.test(w))
+      const toks = tokenize(LX, fa, ov).flatMap(tk => tk.words.length > 1 && tk.words.slice(0, -1).some(w => /~$|\u200cی$|[اوآ]ی$/.test(w))
         ? tokenize(LX, tk.words.join(" "), ov, ALL_SOLO).map((x, j, a) => ({ ...x, pre: j ? x.pre : tk.pre, post: j === a.length - 1 ? tk.post : x.post })) : [tk]);
       const tg = ezTargets(toks), n = toks.filter(x => x.words.length).length;
       if (tg.length >= 1 && tg.length <= 4 && n <= 15 && toks.every(x => !x.words.length || x.e)) out.push({ toks, tg, en });
@@ -4112,6 +4359,217 @@ const READER_KINDS = {
     }).join("");
   },
   news() { return RD.sents.map((s, si) => `<p class="sent hl">${rdParts(s, si).join(" ")}</p>${rdLine(s)}`).join(""); }
+};
+
+// ---- listen.js ----
+// ================= listening =================
+// One audio file holds every sentence (AUDIO.t gives start/end per sentence), played with a single <audio> element.
+const LGROUPS = [
+  ["Everyday", "Messages, announcements and the weather", ["la1", "la4", "r1", "r7", "la2", "la3"]],
+  ["Stories", "The lost ring, then everyday stories", ["st1", "st2", "st3", "st4", "st5", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"]],
+  ["News about real events", "Real stories, read the way the news reads them", ["n8", "n9", "n10", "n11", "n12", "n13", "n14", "n15"]],
+  ["More news-style reports", "The economy, climate, health and more", ["n1", "n2", "n3", "n4", "n5", "n6", "n7"]]
+];
+const LORDER = LGROUPS.flatMap(g => g[2]).filter(id => AUDIO.t[id]);
+const ICON = {
+  play: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor"/></svg>`,
+  pause: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>`,
+  again: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>`,
+  prev: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h2.2v12H6zM20 6v12l-9.5-6z" fill="currentColor"/></svg>`,
+  next: `<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15.8 6H18v12h-2.2zM4 6l9.5 6L4 18z" fill="currentColor"/></svg>`
+};
+const fmtClock = s => Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
+const textDur = id => { const v = AUDIO.t[id]; return v ? v[v.length - 1][1] - v[0][0] : 0; };
+
+// ----- the player -----
+const AP = { el: null, url: null, loading: null, err: false, want: null, raf: 0, range: null, unlocked: false };
+const AUDIO_TYPE = /\.mp3$/i.test(AUDIO.file) ? "audio/mpeg" : "audio/mp4";
+const SILENT = "data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA=";
+function apEl() {
+  if (!AP.el) {
+    AP.el = new Audio(); AP.el.preload = "auto"; try { AP.el.preservesPitch = true; } catch (e) {}
+    // if a blob: URL is refused (some hosts block it), fall back to the file itself; otherwise report the error
+    AP.el.addEventListener("error", () => {
+      const src = AP.el.currentSrc || AP.el.src || "";
+      if (!AP.url || src.startsWith("data:")) return;
+      if (src.startsWith("blob:") && !window.AUDIO_B64) { AP.url = AUDIO.file; AP.el.src = AP.url; AP.el.load(); return; }
+      AP.err = true; AP.want = null; if (SHEET && (SHEET.kind === "listen" || SHEET.kind === "qlisten")) drawSheet();
+    });
+  }
+  return AP.el;
+}
+function apLoad() {
+  if (AP.url) return Promise.resolve();
+  if (AP.loading) return AP.loading;
+  AP.err = false;
+  AP.loading = (async () => {
+    try {
+      if (window.AUDIO_B64) {
+        const bin = atob(window.AUDIO_B64), u8 = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+        AP.url = URL.createObjectURL(new Blob([u8], { type: AUDIO_TYPE }));
+      } else {
+        try { const r = await fetch(AUDIO.file); if (!r.ok) throw new Error("audio " + r.status); AP.url = URL.createObjectURL(new Blob([await r.arrayBuffer()], { type: AUDIO_TYPE })); }
+        catch (e) { AP.url = AUDIO.file; } // let the audio element fetch it directly
+      }
+      const el = apEl(); el.src = AP.url; el.load();
+      if (AP.want) { const w = AP.want; AP.want = null; apPlay(w.from, w.to, w.onTick, w.onEnd); }
+    } catch (e) { AP.err = true; AP.want = null; AP.loading = null; if (SHEET && (SHEET.kind === "listen" || SHEET.kind === "qlisten")) drawSheet(); }
+  })();
+  return AP.loading;
+}
+// forget a failed load so the next tap tries again from the start
+function apReset() {
+  if (AP.url && AP.url.startsWith("blob:")) { try { URL.revokeObjectURL(AP.url); } catch (e) {} }
+  AP.url = null; AP.loading = null; AP.err = false; AP.want = null; AP.range = null;
+  if (AP.el) { AP.el.removeAttribute("src"); try { AP.el.load(); } catch (e) {} }
+}
+function apPlay(from, to, onTick, onEnd) {
+  const el = apEl(); cancelAnimationFrame(AP.raf);
+  if (AP.err) apReset();
+  if (!AP.url) { // first tap: unlock the element inside the tap, then play once the file is ready
+    if (!AP.unlocked) { try { el.src = SILENT; const p = el.play(); if (p) p.catch(() => {}); } catch (e) {} AP.unlocked = true; }
+    AP.want = { from, to, onTick, onEnd }; apLoad(); return;
+  }
+  AP.range = { from, to, onTick, onEnd };
+  el.playbackRate = S.set.lrate || 1;
+  const go = () => {
+    try { el.currentTime = from; } catch (e) {}
+    const p = el.play(); if (p) p.catch(() => { AP.range = null; });
+    AP.raf = requestAnimationFrame(apTick);
+  };
+  if (el.readyState >= 1) go(); else el.addEventListener("loadedmetadata", go, { once: true });
+}
+function apTick() {
+  const el = AP.el, r = AP.range; if (!r) return;
+  const t = el.currentTime;
+  if (r.onTick) r.onTick(t);
+  if (t >= r.to || el.ended) { el.pause(); AP.range = null; if (r.onEnd) r.onEnd(); return; }
+  if (!el.paused) AP.raf = requestAnimationFrame(apTick);
+}
+function apStop() { if (AP.el) AP.el.pause(); cancelAnimationFrame(AP.raf); AP.range = null; AP.want = null; }
+const apBusy = () => !!AP.want || !!(AP.el && AP.range && !AP.el.paused);
+
+// ----- the Listen tab -----
+function vListen() {
+  apLoad();
+  const L = todayLog(), heardAll = Object.keys(S.ldone).length;
+  const rows = ids => ids.filter(id => AUDIO.t[id]).map(id => {
+    const t = TEXTS_.find(x => x.id === id); if (!t) return "";
+    const done = S.ldone[id];
+    return `<button class="row ${done ? "done" : ""}" data-act="openListen" data-id="${id}"><span class="tag ltag">${done ? "✓" : fmtClock(textDur(id))}</span>
+      <span><div class="t1">${esc(t.en)}</div><div class="t2"><span class="fa">${esc(faShow(t.fa))}</span>${t.news ? `  ${esc(t.news)}` : ""}</div></span><span class="go">${done ? "Again" : "Listen"}</span></button>`;
+  }).join("");
+  return `<h1>Listen</h1><p class="sub">Train your ear, from everyday messages up to the news.</p>
+  <button class="big-cta qlcta" data-act="drill" data-id="listen"><span><div class="n">${ICON.play}</div><div class="l">Quick listen: hear a sentence, pick what it means</div></span><span>${S.best.listen != null ? "Best " + S.best.listen : "Play"}</span></button>
+  ${LGROUPS.map(g => `<div class="lvl-h"><h2>${g[0]}</h2><span class="muted">${g[2].filter(id => S.ldone[id]).length} of ${g[2].length}</span></div>
+    <p class="sub small" style="margin:-4px 0 10px">${g[1]}</p><div class="list lib">${rows(g[2])}</div>`).join("")}
+  <h2>Real news, when you're ready</h2>
+  <div class="panel guide newslinks"><p>These are real Persian news services. A good routine: listen once for the gist, then again for the details, and read along only on the third time.</p>
+    <a href="https://www.bbc.com/persian" target="_blank" rel="noopener"><b>BBC Persian</b><span>News, video and radio</span></a>
+    <a href="https://parsi.euronews.com" target="_blank" rel="noopener"><b>Euronews Persian</b><span>Short daily video bulletins</span></a>
+    <a href="https://www.sbs.com.au/language/persian/fa" target="_blank" rel="noopener"><b>SBS Persian</b><span>Podcasts, including a weekly news wrap</span></a>
+    <a href="https://www.dw.com/fa-ir" target="_blank" rel="noopener"><b>DW Persian</b><span>News and reports</span></a></div>
+  <p class="muted small" style="margin-top:12px">The voice in this app is computer-generated, so it is a little flat. Real newsreaders speak faster: once the news here feels easy, try it at 1.25×.</p>`;
+}
+
+// ----- one listening text -----
+let LS = null;
+function openListen(id) {
+  const t = TEXTS_.find(x => x.id === id), times = AUDIO.t[id]; if (!t || !times) return;
+  apStop(); apLoad();
+  const ov = ovFor(t);
+  LS = { id, t, times, sents: t.s.map(([fa, en]) => ({ en, parts: fa.split(" / ").map(h => tokenize(LX, h, ov)) })), cur: 0, fa: false, fin: false, en: false,
+    ans: {}, qopts: (t.q || []).map(q => shuffle([q[1], q[2], q[3]])), heard: new Set(), base: false, xp: 0, finished: false, playingAll: false };
+  if (SHEET) { SHEET.kind = "listen"; SHEET.title = t.en; drawSheet(); topScroll(); } else openSheet("listen", t.en);
+}
+function lsIndexAt(t) { const v = LS.times; let i = 0; while (i + 1 < v.length && t >= v[i + 1][0] - 0.2) i++; return i; }
+function lsOnTick(time) {
+  if (!LS) return;
+  const v = LS.times, i = lsIndexAt(time);
+  for (let k = 0; k < v.length; k++) if (time >= v[k][1] - 0.15) LS.heard.add(k);
+  if (i !== LS.cur) { LS.cur = i; document.querySelectorAll("[data-li]").forEach(el => el.classList.toggle("cur", +el.dataset.li === i)); }
+  const from = v[0][0], total = v[v.length - 1][1] - from, el = $("#lbar"), tl = $("#ltime");
+  if (el) el.style.width = Math.min(100, Math.max(0, (time - from) / total * 100)) + "%";
+  if (tl) tl.textContent = fmtClock(Math.max(0, time - from)) + " / " + fmtClock(total);
+  const sc = $("#lsc"); if (sc) sc.textContent = `Sentence ${i + 1} of ${v.length}`;
+}
+function lsAward() {
+  if (!LS || LS.base || LS.heard.size < LS.times.length) return;
+  LS.base = true; const x = S.ldone[LS.id] ? 5 : 10; S.ldone[LS.id] = today(); LS.xp += x; addXP(x, "listen", "listen"); toast(`+${x} XP for listening to the whole thing`);
+}
+function lsEnded() { LS && (LS.playingAll = false); lsAward(); if (SHEET && SHEET.kind === "listen") { const y = $("#sheet").scrollTop; drawSheet(); $("#sheet").scrollTop = y; } }
+function lsPlayFrom(i, all) {
+  const v = LS.times; LS.cur = i; LS.playingAll = all;
+  apPlay(v[i][0], all ? v[v.length - 1][1] : v[i][1], lsOnTick, lsEnded);
+  const y = $("#sheet").scrollTop; drawSheet(); $("#sheet").scrollTop = y;
+}
+SHEETS.listen = () => {
+  const { t, times } = LS, busy = apBusy(), n = times.length, allAns = !t.q || t.q.every((_, qi) => LS.ans[qi] != null);
+  const total = times[n - 1][1] - times[0][0];
+  let text = "";
+  if (LS.fa || LS.fin || LS.en) {
+    text = LS.sents.map((s, i) => `<div class="lsent ${i === LS.cur ? "cur" : ""} ${LS.heard.has(i) ? "heard" : ""}" data-li="${i}">
+      <button class="lplay" data-act="lsent" data-i="${i}" aria-label="Play sentence ${i + 1}">${ICON.play}</button>
+      <div class="lbody">${LS.fa ? `<div class="lfa">${s.parts.map(p => tapHTML(p)).join(" / ")}</div>` : ""}${LS.fin ? `<div class="lfin">${s.parts.map(p => finHTML(p)).join(" / ")}</div>` : ""}${LS.en ? `<div class="len">${esc(s.en)}</div>` : ""}</div></div>`).join("");
+  } else {
+    text = `<p class="lplace">Listen first, without reading. Turn on the text below when you need it, or tap a number to hear one sentence again.</p>
+      <div class="lchips">${times.map((_, i) => `<button class="${i === LS.cur ? "cur" : ""} ${LS.heard.has(i) ? "heard" : ""}" data-li="${i}" data-act="lsent" data-i="${i}">${i + 1}</button>`).join("")}</div>`;
+  }
+  let after = "";
+  if (t.q && t.q.length) after = `<div class="qbox"><h2 style="margin:22px 0 4px">Questions</h2>${t.q.map((q, qi) => `<h3>${qText(q[0])}</h3><div class="opts en-opts">${LS.qopts[qi].map((o, oi) => {
+    const a = LS.ans[qi], cls = a == null ? "" : o === q[1] ? "ok" : oi === a ? "bad" : "dim";
+    return `<button class="opt ${cls}" data-act="lq" data-q="${qi}" data-o="${oi}" ${a != null ? "disabled" : ""}>${esc(o)}</button>`; }).join("")}</div>`).join("")}</div>`;
+  if (allAns && LS.finished) after += summaryHTML("+" + LS.xp + " XP", `${LS.qRight} of ${t.q.length} right.`, nextListenBtn());
+  else if (allAns && t.q) after += `<div class="btn-row"><button class="btn primary full" data-act="lfinish">Finish</button></div>`;
+  return `<p class="rtitle">${esc(faShow(t.fa))}</p>
+  <div class="rmeta"><span class="rchips"><button class="chip sm ${LS.fa ? "on" : ""}" data-act="ltog" data-k="fa">Persian</button><button class="chip sm ${LS.fin ? "on" : ""}" data-act="ltog" data-k="fin">Finglish</button>${allAns ? `<button class="chip sm ${LS.en ? "on" : ""}" data-act="ltog" data-k="en">English</button>` : ""}</span>
+    <span class="rmr"><span>${t.news ? esc(t.news) : "Level " + t.lvl}</span><span>${fmtClock(total)}</span></span></div>
+  ${AP.err ? `<div class="panel" style="margin-bottom:12px"><p class="small" style="margin:0">The audio couldn't load. Check your connection and try again.</p><div class="btn-row"><button class="btn" data-act="lretry">Try again</button></div></div>` : ""}
+  <div class="player"><button class="pbig" data-act="lplay" aria-label="${busy ? "Pause" : "Play"}">${busy ? ICON.pause : ICON.play}</button>
+    <div class="pinfo"><div class="pbar"><i id="lbar" style="width:${Math.round(LS.heard.size / n * 100)}%"></i></div>
+    <div class="pt"><span id="lsc">Sentence ${LS.cur + 1} of ${n}</span><span id="ltime">${AP.want ? "Loading audio…" : "0:00 / " + fmtClock(total)}</span></div></div></div>
+  <div class="pctl"><button class="btn" data-act="lprev" aria-label="Previous sentence">${ICON.prev}</button><button class="btn" data-act="lrep">${ICON.again} Again</button><button class="btn" data-act="lnext" aria-label="Next sentence">${ICON.next}</button></div>
+  <div class="seg lrate">${[[0.75, "0.75×"], [1, "1×"], [1.25, "1.25×"]].map(([v, l]) => `<button class="${(S.set.lrate || 1) === v ? "on" : ""}" data-act="lrate" data-v="${v}">${l}</button>`).join("")}</div>
+  <div class="ltext">${text}</div>${after}`;
+};
+function nextListenBtn() {
+  const i = LORDER.indexOf(LS.id), nx = LORDER.slice(i + 1).find(id => !S.ldone[id]) || LORDER[(i + 1) % LORDER.length];
+  const t = TEXTS_.find(x => x.id === nx);
+  return t ? `<button class="btn primary full" data-act="openListen" data-id="${nx}">Next: ${esc(t.en)}</button>` : "";
+}
+const qText = s => esc(s).replace(/«([^»]+)»/g, '<span class="fa">«$1»</span>');
+function nextListen() { return LORDER.find(id => !S.ldone[id]) || LORDER[dayNum() % LORDER.length]; }
+
+// ----- quick listen drill -----
+function qlItems() {
+  const pool = [];
+  for (const id of LORDER) {
+    const t = TEXTS_.find(x => x.id === id); if (!t) continue;
+    t.s.forEach((s, i) => { const n = s[0].split(/\s+/).length; if (n >= 3 && n <= 11 && AUDIO.t[id][i]) pool.push({ id, i, fa: s[0], en: s[1], t }); });
+  }
+  return shuffle(pool).slice(0, 10).map(it => {
+    const near = [...new Set(shuffle(pool.filter(p => p.en !== it.en && Math.abs(p.en.length - it.en.length) < 30)).map(p => p.en))];
+    return { ...it, opts: shuffle([it.en, ...near.slice(0, 2)]) };
+  });
+}
+function qlPlay() { const it = DR.items[DR.i], v = AUDIO.t[it.id][it.i]; apPlay(v[0], v[1], null, () => { if (SHEET && SHEET.kind === "qlisten") { const b = $("#qlbtn"); if (b) b.innerHTML = ICON.again + " Play again"; } }); }
+SHEETS.qlisten = () => {
+  if (!DR.started) return `<div class="summary" style="padding-top:20px"><p class="bigfa">گوش کن</p><div class="fin">goosh kon</div><div class="en">listen</div>
+    <p class="muted" style="margin:18px 0">You'll hear a sentence. Pick what it means. Play it again as often as you like, or slow it down.</p>
+    ${AP.err ? `<p class="small" style="color:var(--bad)">The audio couldn't load. Check your connection and try again.</p>` : ""}
+    <button class="btn primary full" data-act="qlgo">Start</button></div>`;
+  if (DR.i >= DR.items.length) return summaryHTML(`${DR.score} / ${DR.items.length}`, `Best: ${S.best.listen}.`, `<button class="btn primary full" data-act="drill" data-id="listen">Play again</button>`);
+  const it = DR.items[DR.i], done = DR.ans != null, toks = tokenize(LX, it.fa.replace(/ \/ /g, " "), ovFor(it.t));
+  return `<div class="progress"><i style="width:${DR.i / DR.items.length * 100}%"></i></div>
+  <div class="card" style="min-height:0;padding:22px 18px"><div class="kind">What did you hear?</div>
+    <button class="btn primary qlplay" id="qlbtn" data-act="qlplay">${apBusy() ? ICON.pause + " Playing" : ICON.again + " Play again"}</button>
+    <div class="seg lrate" style="margin-top:12px">${[[0.75, "Slower"], [1, "Normal"]].map(([v, l]) => `<button class="${(S.set.lrate || 1) === v ? "on" : ""}" data-act="lrate" data-v="${v}">${l}</button>`).join("")}</div>
+    ${done ? `<div class="hsent" style="margin-top:14px">${tapHTML(toks)}</div><p class="finline">${finHTML(toks)}</p>`
+      : DR.fin ? `<p class="finline">${finHTML(toks)}</p>` : ""}
+    ${done ? "" : `<div class="cardtools"><button class="chip sm ${DR.fin ? "on" : ""}" data-act="dfin">Finglish</button><span class="muted small">Try without it first</span></div>`}</div>
+  <div class="opts en-opts">${it.opts.map((o, i) => `<button class="opt ${done ? (o === it.en ? "ok" : i === DR.ans ? "bad" : "dim") : ""}" data-act="qlans" data-i="${i}" ${done ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>
+  ${done ? `<div class="btn-row"><button class="btn primary" data-act="qlnext">Next</button></div>` : ""}`;
 };
 
 // ---- lion.js ----
