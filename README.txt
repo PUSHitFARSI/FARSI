@@ -1,5 +1,5 @@
-FARSI READING PRACTICE: YOUR OWN COPY
-=====================================
+KAM KAM: YOUR OWN COPY
+======================
 
 This folder is the whole app. It needs no account and works offline.
 Your progress is saved on whichever device and browser you use it in.
@@ -9,7 +9,7 @@ WHAT'S IN THE FOLDER
    listen-....mp4         the audio for the Listen tab (all recordings in one file)
    sw.js                  keeps it working offline
    manifest.webmanifest   name and icon for the home screen
-   icon-180.png, icon-192.png, icon-512.png, icon-maskable.png   the lion icon
+   icon-180.png, icon-192.png, icon-512.png, icon-maskable.png   the kam kam icon
 
 UPDATING A COPY YOU ALREADY HOST (for example on GitHub Pages)
    Upload all of the files above and replace the old ones. Your progress

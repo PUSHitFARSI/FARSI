@@ -1,5 +1,5 @@
 // Keeps the app working offline. Serves the saved copy first, then refreshes it in the background.
-const CACHE = "farsi-ada1493e";
+const CACHE = "farsi-bfdea29e";
 const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-180.png", "./icon-maskable.png", "./listen-4821234d.mp4"];
 self.addEventListener("install", e => { e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting())); });
 self.addEventListener("activate", e => {

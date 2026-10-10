@@ -1,7 +1,7 @@
 {
-  "name": "Farsi reading practice",
-  "short_name": "Farsi",
-  "description": "Read, spell and type Persian: words, texts, poems, proverbs and drills.",
+  "name": "kam kam",
+  "short_name": "kam kam",
+  "description": "Persian little by little: read, spell, type and listen.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
