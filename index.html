@@ -194,6 +194,9 @@ h2{font-size:1rem;font-weight:600;margin:34px 0 12px;letter-spacing:-.005em}
 .wlist .wen{font-size:.88rem}
 /* swipe to rate in a deck's word list */
 .swhint{font-size:.8rem;color:var(--muted);margin:0 0 8px}
+.swhint b{font-weight:600;color:var(--ink)}
+.swall{display:flex;justify-content:flex-end;margin:-2px 0 10px}
+.swall .btn{font-size:.88rem;min-height:36px;padding:6px 4px}
 .wlist .sw{position:relative;overflow:hidden;border-top:1px solid var(--line)}
 .wlist .sw:first-child{border-top:0}
 .wlist .sw .wrow{border-top:0}
@@ -2893,6 +2896,7 @@ function grade(fa, q) {
   const s = S.w[fa] || { box: 0, due: 0, seen: false }; const now = Date.now();
   if (!s.seen) S.day.nw++;
   s.seen = true;
+  if (q < 2 && s.known) { delete s.known; if (q === 1) s.box = Math.min(s.box, 2); }
   if (q === 0) { s.box = 0; s.due = now + 10 * 6e4; }
   else if (q === 1) { s.box = Math.max(1, s.box); s.due = now + DAY - 36e5; }
   else { s.box = Math.min(5, s.box + 1); s.due = now + GAPS[s.box] * DAY - 36e5; }
@@ -2900,7 +2904,7 @@ function grade(fa, q) {
 }
 function dueList() {
   const now = Date.now();
-  return Object.keys(S.w).filter(fa => { const s = S.w[fa]; return s && s.seen && s.due <= now && getW(fa); })
+  return Object.keys(S.w).filter(fa => { const s = S.w[fa]; return s && s.seen && !s.known && s.due <= now && getW(fa); })
     .sort((a, b) => S.w[a].due - S.w[b].due);
 }
 function deckStats(d) {
@@ -3276,8 +3280,8 @@ function startSession(kind, opt = {}) {
     const ks = nbKeys(); if (!ks.length) { toast("Your mistakes notebook is empty."); return; }
     q = shuffle(ks).slice(0, 20).map(key => ({ t: "nb", key, n: 0 })); title = "Mistakes notebook";
   } else if (kind === "deck") {
-    const d = DECK[opt.deck], pool = d.w.filter(w => seen(w.fa));
-    if (!pool.length) { toast("Learn a few words from this deck first."); return; }
+    const d = DECK[opt.deck], pool = d.w.filter(w => seen(w.fa) && !S.w[w.fa].known);
+    if (!pool.length) { toast(d.w.some(w => seen(w.fa)) ? "You know every word you've started here." : "Learn a few words from this deck first."); return; }
     q = shuffle(pool).slice(0, 15).map(w => ({ fa: w.fa, t: typeFor(w.fa), n: 0 })); title = "Practice: " + d.en;
   } else if (kind === "my") {
     const pool = S.my.filter(getW); if (!pool.length) { toast("Tap words in the reader to save them here."); return; }
@@ -3369,11 +3373,13 @@ SHEETS.limit = () => {
 // ----- deck details -----
 SHEETS.deck = () => {
   const d = DECK[DS.id], s = deckStats(d), unseen = d.w.length - s.started;
+  const learning = d.w.filter(w => seen(w.fa) && !S.w[w.fa].known).length, notKnown = d.w.filter(w => !(S.w[w.fa] && S.w[w.fa].known)).length;
   return `<p class="rtitle">${esc(d.fa)}</p><p class="muted" style="margin:0 0 14px">${LEVELS_INFO[d.lvl][0]}. ${s.learned} learned, ${s.started - s.learned} learning, ${unseen} new.</p>
   ${unseen ? `<button class="btn primary full" data-act="learnDeck" data-id="${d.id}">Learn new words from this deck</button>` : ""}
-  ${s.started ? `<div class="btn-row"><button class="btn full" data-act="practiceDeck" data-id="${d.id}">Practice words you've started</button></div>` : ""}
+  ${learning ? `<div class="btn-row"><button class="btn full" data-act="practiceDeck" data-id="${d.id}">Practice words you've started</button></div>` : ""}
   <div class="legend" style="margin:18px 0 8px"><span><i class="c-new"></i>new</span><span><i class="c-learn"></i>learning</span><span><i class="c-known"></i>known</span><span><i class="c-master"></i>mastered</span></div>
-  <p class="swhint">Swipe a word right if you know it, left if you don't.</p>
+  <p class="swhint">Swipe a word right if you know it: <b>Knew it</b> takes it out of your reviews, <b>Slow</b> keeps practicing it. Swipe left if you don't know it.</p>
+  ${notKnown ? `<div class="swall"><button class="btn quiet sm" data-act="swall" data-id="${d.id}">Mark all ${notKnown} as known</button></div>` : ""}
   <div class="list wlist">${d.w.map(swipeRow).join("")}</div>`;
 };
 
@@ -4655,6 +4661,7 @@ document.addEventListener("pointerdown", e => {
   const f = e.target.closest && e.target.closest(".sw-front");
   if (!f || (e.pointerType === "mouse" && e.button !== 0)) return;
   const row = f.parentNode, base = +row.dataset.x || 0;
+  if ($("#snack").classList.contains("on")) swHideSnack(); // starting the next swipe dismisses the last Undo
   SWG = { row, f, id: e.pointerId, x0: e.clientX, y0: e.clientY, base, x: base, mode: null };
 });
 document.addEventListener("pointermove", e => {
@@ -4683,20 +4690,38 @@ function swEnd(e) {
 document.addEventListener("pointerup", swEnd);
 document.addEventListener("pointercancel", swEnd);
 
+// A word you know is marked as known: it counts as learned and never comes up in reviews or practice again
+// (until you swipe it Slow or Didn't know, which puts it back into learning).
+const KNOWN_DUE = 4e12;
+function setKnown(fa) { S.w[fa] = { ...(S.w[fa] || {}), box: 5, seen: true, known: true, due: KNOWN_DUE, last: Date.now() }; }
 function swRate(fa, q) {
   if (!fa) return;
   const prev = S.w[fa] ? { ...S.w[fa] } : null, first = !seen(fa), nw = S.day.nw;
-  const due = !prev || !prev.seen || prev.due <= Date.now(); // points only when the word was new or due, like a review
-  grade(fa, q);
-  let xp = 0; if (due) { xp = [1, 2, 3][q] + (first ? 2 : 0); addXP(xp, "rev", "words"); }
+  let xp = 0, msg;
+  if (q === 2) { setKnown(fa); save(); msg = "Known: it won't come up in your reviews"; }
+  else {
+    const due = !prev || !prev.seen || prev.known || prev.due <= Date.now(); // points only when the word was new or due, like a review
+    grade(fa, q);
+    if (due) { xp = [1, 2][q] + (first ? 2 : 0); addXP(xp, "rev", "words"); }
+    const days = Math.round((S.w[fa].due - Date.now()) / DAY);
+    msg = `${["Didn't know", "Slow"][q]}, ${q === 0 ? "back in 10 minutes" : days <= 1 ? "back tomorrow" : `back in ${days} days`}`;
+  }
   sfx(q === 2 ? "right" : q === 1 ? "tick" : "soft");
-  UNDO = { fa, prev, nw, xp };
+  UNDO = { many: [[fa, prev]], nw, xp };
   swRedraw(fa, ["miss", "slow", "knew"][q]);
-  const s = S.w[fa], days = Math.round((s.due - Date.now()) / DAY);
-  const when = q === 0 ? "back in 10 minutes" : days <= 1 ? "back tomorrow" : `back in ${days} days`;
-  const el = $("#snack");
-  el.innerHTML = `<span><b class="fa">${esc(fa)}</b> ${["Didn't know", "Slow", "Knew it"][q]}, ${when}${xp ? ` · +${xp} XP` : ""}</span><button data-act="swundo">Undo</button>`;
+  snack(`<b class="fa">${esc(fa)}</b> ${msg}${xp ? ` · +${xp} XP` : ""}`);
+}
+function snack(html) {
+  const el = $("#snack"); el.innerHTML = `<span>${html}</span><button data-act="swundo">Undo</button>`;
   el.classList.add("on"); clearTimeout(undoT); undoT = setTimeout(() => { el.classList.remove("on"); UNDO = null; }, 5000);
+}
+function swAll(id) {
+  const d = DECK[id]; if (!d) return;
+  const ws = d.w.filter(w => !(S.w[w.fa] && S.w[w.fa].known)); if (!ws.length) return;
+  UNDO = { many: ws.map(w => [w.fa, S.w[w.fa] ? { ...S.w[w.fa] } : null]), nw: S.day.nw, xp: 0 };
+  ws.forEach(w => setKnown(w.fa)); save(); sfx("done");
+  swRedraw(null, null);
+  snack(`${ws.length} word${ws.length === 1 ? "" : "s"} marked as known`);
 }
 function swRedraw(fa, flash) {
   SWOPEN = null;
@@ -4709,12 +4734,13 @@ function swRedraw(fa, flash) {
 function swHideSnack() { clearTimeout(undoT); const el = $("#snack"); if (el) el.classList.remove("on"); UNDO = null; }
 Object.assign(ACT, {
   swr: el => swRate(el.dataset.fa, +el.dataset.q),
+  swall: el => swAll(el.dataset.id),
   swundo: () => {
     const u = UNDO; if (!u) return;
-    if (u.prev) S.w[u.fa] = u.prev; else delete S.w[u.fa];
+    for (const [fa, prev] of u.many) { if (prev) S.w[fa] = prev; else delete S.w[fa]; }
     S.day.nw = u.nw;
     if (u.xp) { addXP(-u.xp, null, "words"); const L = S.log[today()]; if (L && L.rev) L.rev--; }
-    save(); swHideSnack(); swRedraw(u.fa, null);
+    save(); swHideSnack(); swRedraw(null, null);
   }
 });
 
