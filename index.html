@@ -40,8 +40,6 @@
   --fa:"Vazirmatn",Tahoma,"Noto Naskh Arabic","Geeza Pro",sans-serif;
   --naskh:"Noto Naskh Arabic","Vazirmatn","Geeza Pro",serif;
   box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
@@ -56,15 +54,17 @@
   --good:#86C7A5; --good-soft:#1C3127; --bad:#E8918B; --bad-soft:#3A2523; color-scheme:dark;
 }
 *,*::before,*::after{box-sizing:inherit}
-html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+html{height:100%;overflow:hidden;overscroll-behavior:none;-webkit-text-size-adjust:100%}
 html.lock{overflow:hidden}
-body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:16px;line-height:1.55;font-weight:400}
+body{margin:0;height:100%;overflow:hidden;overscroll-behavior:none;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);font-family:var(--ui);font-size:16px;line-height:1.55;font-weight:400}
 button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
 button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .fa{font-family:var(--fa);direction:rtl;unicode-bidi:isolate}
 .muted{color:var(--muted)}
 .small{font-size:.85rem}
-.wrap{max-width:600px;margin:0 auto;padding:22px 20px 120px}
+/* App shell: only this box scrolls, so the tab bar below it can't drift (iOS moves position:fixed bars after the keyboard closes) */
+.scroller{flex:1 1 auto;min-height:0;overflow-x:hidden;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;padding-top:env(safe-area-inset-top,0px)}
+.wrap{max-width:600px;margin:0 auto;padding:22px 20px 40px}
 h1{font-size:1.6rem;font-weight:600;margin:8px 0 4px;letter-spacing:-.02em}
 h2{font-size:1rem;font-weight:600;margin:34px 0 12px;letter-spacing:-.005em}
 .sub{margin:0;color:var(--muted);font-size:.92rem}
@@ -217,6 +217,9 @@ h2{font-size:1rem;font-weight:600;margin:34px 0 12px;letter-spacing:-.005em}
 .fin{color:var(--muted);font-size:1.2rem;font-weight:400;min-height:1.9rem}
 .en{font-size:1.1rem;min-height:1.7rem;font-weight:500}
 .prompt-en{font-size:1.4rem;font-weight:600;line-height:1.3;display:block}
+.prompt-fin{display:block;font-size:2rem;font-weight:600;line-height:1.25;color:var(--ink);overflow-wrap:anywhere}
+.prompt-mean{display:block;font-size:1rem;color:var(--muted);margin-top:6px;line-height:1.4}
+.prompt-mean b,.tsub b{font-weight:500;color:var(--ink)}
 .parts{margin-top:12px;font-size:.9rem;color:var(--muted)}
 .parts .fa{color:var(--ink);font-weight:600}
 .example{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);text-align:right}
@@ -384,7 +387,7 @@ h2{font-size:1rem;font-weight:600;margin:34px 0 12px;letter-spacing:-.005em}
 .hsent .tok{padding:0 1px}
 
 /* ---------- nav ---------- */
-nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:10;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+nav.tabs{position:relative;flex:none;z-index:10;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
 nav.tabs .in{display:flex;max-width:600px;margin:0 auto}
 nav.tabs button{flex:1;border:0;background:none;color:var(--faint);font-size:.7rem;padding:8px 2px 10px;display:flex;flex-direction:column;align-items:center;gap:0;min-height:58px}
@@ -527,7 +530,7 @@ nav.tabs button.on .fa{color:var(--accent)}
 </style>
 </head>
 <body>
-<main class="wrap" id="view"></main>
+<div class="scroller" id="scroller"><main class="wrap" id="view"></main></div>
 <nav class="tabs" aria-label="Sections"><div class="in">
   <button data-tab="today"><span class="fa">امروز</span>Today</button>
   <button data-tab="words"><span class="fa">واژه</span>Words</button>
@@ -1374,7 +1377,7 @@ const DECKS = [
 ["غریب","gharib","stranger; lonely far from home"],
 ["آشنا","ashna","familiar; acquaintance"],
 ["روزگار","roozegar","the times; fate"],
-["جاودانه","javdane","eternal"],
+["جاودانه","javedane","eternal"],
 ["یادگار","yadegar","keepsake","یاد (memory) + گار"],
 ["چشمه","cheshme","spring (of water)"],
 ["گیسو","gisoo","long hair, tresses"],
@@ -1444,7 +1447,7 @@ const TEXTS = [
 ["What was the weather like?","Cold and rainy","Sunny and warm","Snowy"],
 ["What did they talk about?","Work, family and holiday plans","Movies and books","Sports"]
 ]},
-{id:"t3", lvl:2, fa:"شب یلدا", en:"Yalda night", s:[
+{id:"t3", lvl:2, fa:"شب~ یلدا", en:"Yalda night", s:[
 ["شب~ یلدا طولانی|ترین شب~ سال است.","Yalda night is the longest night of the year."],
 ["ایرانی|ها در این شب کنار~ هم جمع می|شوند و تا دیروقت بیدار می|مانند.","On this night Iranians gather together and stay up late."],
 ["روی~ سفره معمولاً انار، هندوانه، آجیل و شیرینی می|گذارند.","They usually put pomegranates, watermelon, nuts and sweets on the spread."],
@@ -1516,7 +1519,7 @@ const TEXTS = [
 ["What is the grandmother like?","A bit nosy","Very shy","Stingy"]
 ]},
 
-{id:"n1", lvl:3, fa:"هوش مصنوعی در کلاس درس", en:"AI in the classroom", s:[
+{id:"n1", lvl:3, fa:"هوش~ مصنوعی در کلاس~ درس", en:"AI in the classroom", s:[
 ["در سال|های اخیر، هوش~ مصنوعی به بخش~ مهمی از زندگی~ روزمره تبدیل شده است.","In recent years, AI has become an important part of everyday life."],
 ["بسیاری از دانش|آموزان برای نوشتن~ تکالیف و یادگیری~ زبان از این فناوری استفاده می|کنند.","Many students use this technology to do homework and learn languages."],
 ["برخی از معلمان نگران|اند که دانش|آموزان مهارت~ فکر کردن را از دست بدهند.","Some teachers worry that students will lose the ability to think for themselves."],
@@ -1526,7 +1529,7 @@ const TEXTS = [
 ["What are some teachers worried about?","Students losing the ability to think","Computers being too expensive","Students reading too much"],
 ["According to experts, what's the biggest challenge?","Finding the right balance","Banning the technology","Training more teachers"]
 ]},
-{id:"n2", lvl:3, fa:"گرمایش زمین و آب", en:"Global warming and water", s:[
+{id:"n2", lvl:3, fa:"گرمایش~ زمین و آب", en:"Global warming and water", s:[
 ["دانشمندان می|گویند دمای زمین در صد سال~ گذشته به|طور~ محسوسی افزایش یافته است.","Scientists say the Earth's temperature has risen noticeably over the past hundred years."],
 ["یکی از پیامدهای این گرمایش، خشکسالی|های طولانی در مناطق~ گرم~ جهان است.","One consequence of this warming is long droughts in the hot regions of the world."],
 ["در ایران نیز بسیاری از دریاچه|ها و رودخانه|ها کم|آب شده|اند.","In Iran too, many lakes and rivers have lost much of their water."],
@@ -1536,7 +1539,7 @@ const TEXTS = [
 ["What is one consequence of warming mentioned in the text?","Long droughts","More snow","Cheaper food"],
 ["Where do experts say water use must be managed better?","In farming","In schools","In homes only"]
 ]},
-{id:"n3", lvl:3, fa:"زبان مادری در مهاجرت", en:"Mother tongue in migration", s:[
+{id:"n3", lvl:3, fa:"زبان~ مادری در مهاجرت", en:"Mother tongue in migration", s:[
 ["بسیاری از فرزندان~ مهاجران زبان~ مادری خود را می|فهمند، اما خواندن و نوشتن برایشان دشوار است.","Many children of immigrants understand their mother tongue, but reading and writing are hard for them."],
 ["پژوهشگران به زبان~ این افراد «زبان~ میراثی» می|گویند.","Researchers call these people's language a \"heritage language.\""],
 ["تحقیقات نشان می|دهد که دوزبانه بودن به رشد~ ذهن و انعطاف~ فکری کمک می|کند.","Research shows that being bilingual helps the mind develop and keeps thinking flexible."],
@@ -1566,7 +1569,7 @@ const TEXTS = [
 ["How long did Ferdowsi spend on the Shahnameh?","About thirty years","About three years","His whole childhood"],
 ["What does Rostam stand for?","Strength and loyalty","Wisdom and poetry","Wealth and power"]
 ]},
-{id:"n6", lvl:3, fa:"ورزش و سلامت روان", en:"Exercise and mental health", s:[
+{id:"n6", lvl:3, fa:"ورزش و سلامت~ روان", en:"Exercise and mental health", s:[
 ["پژوهش|های جدید نشان می|دهند که ورزش~ منظم فقط برای بدن مفید نیست.","New research shows that regular exercise isn't only good for the body."],
 ["حتی سی دقیقه پیاده|روی در روز می|تواند اضطراب و افسردگی را کاهش دهد.","Even thirty minutes of walking a day can reduce anxiety and depression."],
 ["هنگام~ ورزش، مغز موادی ترشح می|کند که حال~ ما را بهتر می|کنند.","During exercise, the brain releases substances that lift our mood."],
@@ -1598,7 +1601,7 @@ const TEXTS = [
 {id:"c3", lvl:4, kind:"poem", fa:"نی|نامه", en:"The song of the reed (Rumi)", src:"Rumi, the opening of the Masnavi, 13th century.", s:[
 ["بشنو این نی چون شکایت می|کند / از جدایی|ها حکایت می|کند","Listen to this reed as it complains, / telling the story of separations."]
 ]},
-{id:"c4", lvl:4, kind:"poem", fa:"یوسف گم|گشته", en:"Don't grieve (Hafez)", src:"Hafez, Divan, 14th century.", s:[
+{id:"c4", lvl:4, kind:"poem", fa:"یوسف~ گم|گشته", en:"Don't grieve (Hafez)", src:"Hafez, Divan, 14th century.", s:[
 ["یوسف~ گم|گشته بازآید به کنعان غم مخور / کلبه|ی احزان شود روزی گلستان غم مخور","Lost Joseph will return to Canaan, do not grieve; / the hut of sorrows will one day become a rose garden, do not grieve."]
 ]}
 ];
@@ -1613,7 +1616,7 @@ const REAL = [
 ["سلام مامان، آره خوردم. تو خوبی؟","Hi Mom, yes I ate. How are you?","b"],
 ["قربونت برم، خوبم. جمعه میای خونه؟ قورمه|سبزی درست می|کنم.","I'm fine, love. Are you coming home on Friday? I'm making ghormeh sabzi.","a"],
 ["حتماً میام! ساعت چند؟","Definitely! What time?","b"],
-["ساعت یک. یادت نره به مامان|بزرگ زنگ بزنی، سراغتو می|گرفت.","One o'clock. Don't forget to call Grandma, she was asking about you.","a"],
+["ساعت~ یک. یادت نره به مامان|بزرگ زنگ بزنی، سراغتو می|گرفت.","One o'clock. Don't forget to call Grandma, she was asking about you.","a"],
 ["باشه، امشب بهش زنگ می|زنم.","OK, I'll call her tonight.","b"],
 ["هوا سرده، کاپشنتو یادت نره. دوستت دارم.","It's cold out, don't forget your jacket. Love you.","a"],
 ["چشم، منم دوستت دارم.","Will do. Love you too.","b"]
@@ -1661,7 +1664,7 @@ const REAL = [
 ["به نام~ خدا","In the name of God"],
 ["با کمال~ مسرت، شما را به جشن~ عروسی~ فرزندانمان دعوت می|کنیم.","With great joy, we invite you to our children's wedding."],
 ["مریم و آرش","Maryam and Arash"],
-["زمان: جمعه ۲۲ آبان ۱۴۰۵، ساعت ۱۹","When: Friday, 22 Aban 1405, at 7 pm"],
+["زمان: جمعه ۲۲ آبان~ ۱۴۰۵، ساعت~ ۱۹","When: Friday, 22 Aban 1405, at 7 pm"],
 ["مکان: تهران، خیابان~ ولیعصر، تالار~ بهار","Where: Tehran, Valiasr Street, Bahar Hall"],
 ["حضور~ شما باعث~ افتخار~ ماست.","Your presence is our honor."],
 ["خانواده|های محمدی و رضایی","The Mohammadi and Rezaei families"]
@@ -1700,9 +1703,9 @@ const REAL = [
 ]},
 {id:"r7", grp:"real", lvl:1, kind:"chat", notime:1, who:["سارا","Sara"], fa:"پیام|های سارا", en:"Messages from a friend", s:[
 ["سلام! فردا بعدازظهر وقت داری؟","Hi! Are you free tomorrow afternoon?","a"],
-["سلام سارا جون! آره، بعد از ساعت چهار آزادم.","Hi Sara dear! Yes, I'm free after four.","b"],
+["سلام سارا جون! آره، بعد از ساعت~ چهار آزادم.","Hi Sara dear! Yes, I'm free after four.","b"],
 ["بریم کافه|ی سر~ کوچه؟ شنیدم کیک|هاش خیلی خوبه.","Shall we go to the café on the corner? I heard their cakes are really good.","a"],
-["عالیه! ساعت پنج اونجا باشیم؟","Great! Shall we meet there at five?","b"],
+["عالیه! ساعت~ پنج اونجا باشیم؟","Great! Shall we meet there at five?","b"],
 ["باشه. فقط ممکنه یه کم دیر برسم، کلاس دارم.","OK. I might be a little late though, I have a class.","a"],
 ["اشکال نداره، منتظرت می|مونم.","No problem, I'll wait for you.","b"],
 ["مرسی! پس تا فردا.","Thanks! See you tomorrow, then.","a"]
@@ -1756,7 +1759,7 @@ const STORY = [
 ["Who was the first suspect?","The neighbor's cat","Uncle Javad","Grandma"],
 ["What did the cat have in its mouth?","A shiny button","The ring","A piece of cake"]
 ]},
-{id:"st4", grp:"story", lvl:2, ch:4, next:"st5", fa:"فصل~ چهارم: شب~ یلدا", en:"The lost ring 4: Yalda night", s:[
+{id:"st4", grp:"story", lvl:2, ch:4, next:"st5", fa:"فصل~ چهارم: شب~ یلدا", en:"The lost ring 4: Yalda night", gl:{"پیش":["pish","with (her heart is with the ring)"],"دیگر":["digar","by then, already"]}, s:[
 ["شب شد و مهمان|ها یکی|یکی از راه رسیدند.","Night fell, and the guests arrived one by one."],
 ["سفره|ی یلدا پر از انار، هندوانه، آجیل و شیرینی|های مادربزرگ بود.","The Yalda spread was full of pomegranates, watermelon, nuts and Grandma's sweets."],
 ["مادربزرگ لبخند می|زد، اما می|دانستم که دلش پیش~ انگشتر است.","Grandma was smiling, but I knew her mind was on the ring."],
@@ -1784,7 +1787,7 @@ const STORY = [
 // Listening texts. "audio" texts are made for the ear (messages, announcements, forecasts).
 // The news reports are about real events (dates and facts checked) and also appear in the Read tab.
 const LISTEN = [
-{id:"la1", grp:"audio", lvl:1, fa:"پیام~ صوتی", en:"A voice message", s:[
+{id:"la1", grp:"audio", lvl:1, fa:"پیام~ صوتی", en:"A voice message", gl:{"منم":["manam","it's me (من + ام)"]}, s:[
 ["سلام، منم سارا. ببخشید که دیروز نتونستم بیام.","Hi, it's me, Sara. Sorry I couldn't come yesterday."],
 ["مامانم یه کم مریض بود و باید پیشش می|موندم.","My mom was a little sick and I had to stay with her."],
 ["امروز عصر وقت داری با هم بریم پیاده|روی؟","Are you free this afternoon to go for a walk together?"],
@@ -1825,7 +1828,7 @@ const LISTEN = [
 ]},
 
 {id:"n8", lvl:3, news:"Dec 2021", fa:"پرتاب~ تلسکوپ~ فضایی~ جیمز وب", en:"The James Webb telescope launches", s:[
-["تلسکوپ~ فضایی~ جیمز وب، بزرگ|ترین تلسکوپ~ فضایی~ تاریخ، روز~ ۴ دی ۱۴۰۰ به فضا پرتاب شد.","The James Webb Space Telescope, the largest space telescope in history, was launched on 25 December 2021."],
+["تلسکوپ~ فضایی~ جیمز وب، بزرگ|ترین تلسکوپ~ فضایی~ تاریخ، روز~ ۴ دی~ ۱۴۰۰ به فضا پرتاب شد.","The James Webb Space Telescope, the largest space telescope in history, was launched on 25 December 2021."],
 ["این تلسکوپ با یک موشک~ آریان ۵ از گویان~ فرانسه در آمریکای جنوبی به فضا رفت.","It went into space on an Ariane 5 rocket from French Guiana in South America."],
 ["جیمز وب حاصل~ همکاری~ ناسا، آژانس~ فضایی~ اروپا و آژانس~ فضایی~ کانادا است.","James Webb is a joint project of NASA, the European Space Agency and the Canadian Space Agency."],
 ["آینه|ی اصلی~ این تلسکوپ از ۱۸ قطعه|ی شش|ضلعی ساخته شده و قطر~ آن حدود~ شش و نیم متر است.","The telescope's main mirror is made of 18 hexagonal pieces and is about six and a half meters across."],
@@ -1912,7 +1915,7 @@ const LISTEN = [
 
 // ---- data_audio.js ----
 // Listening audio: one AAC file with every sentence; t = start and end (seconds) of each sentence. Generated by tools/build_audio.sh.
-const AUDIO = {"file":"listen-f85d5642.mp4","order":["t1","t2","t3","t4","t5","t6","t7","t8","t9","n1","n2","n3","n4","n5","n6","n7","r1","r7","st1","st2","st3","st4","st5","la1","la4","la2","la3","n8","n9","n10","n11","n12","n13","n14","n15"],"t":{"t1":[[0.25,5.485],[5.935,12.36],[12.81,18.348],[18.798,22.829],[23.279,27.726]],"t2":[[28.176,31.996],[32.446,36.373],[36.823,41.026],[41.476,45.818],[46.268,51.396]],"t3":[[51.846,54.716],[55.166,60.484],[60.934,65.601],[66.051,72.161],[72.611,75.418]],"t4":[[75.868,80.605],[81.055,84.805],[85.255,92.592],[93.042,99.019],[99.469,104.305]],"t5":[[104.755,108.767],[109.217,116.032],[116.482,122.023],[122.473,129.118],[129.568,133.773]],"t6":[[134.223,138.147],[138.597,143.274],[143.724,149.668],[150.118,157.227],[157.677,162.235]],"t7":[[162.685,166.868],[167.318,172.531],[172.981,177.676],[178.126,182.262],[182.712,187.348]],"t8":[[187.798,191.211],[191.661,195.888],[196.338,201.477],[201.927,208.923],[209.373,212.798]],"t9":[[213.248,218.251],[218.701,224.894],[225.344,230.376],[230.826,237.964],[238.414,242.621]],"n1":[[243.071,249.143],[249.593,257.267],[257.717,264.42],[264.87,276.086],[276.536,281.632]],"n2":[[282.082,289.365],[289.815,296.223],[296.673,301.879],[302.329,308.947],[309.397,315.009]],"n3":[[315.459,323.749],[324.199,328.692],[329.142,335.957],[336.407,341.454],[341.904,348.208]],"n4":[[348.658,353.046],[353.496,358.822],[359.272,364.6],[365.05,371.744],[372.194,376.075]],"n5":[[376.525,381.494],[381.944,386.794],[387.244,392.596],[393.046,398.491],[398.941,404.421]],"n6":[[404.871,411.64],[412.09,418.011],[418.461,424.099],[424.549,428.141],[428.591,434.709]],"n7":[[435.159,441.066],[441.516,448.618],[449.068,453.863],[454.313,460.246],[460.696,465.491]],"r1":[[465.941,468.739],[469.189,471.743],[472.193,476.797],[477.247,478.977],[479.427,484.616],[485.066,487.191],[487.641,491.077],[491.527,493.315]],"r7":[[493.765,496.285],[496.735,500.357],[500.807,504.511],[504.961,507.213],[507.663,510.949],[511.399,513.952],[514.402,516.097]],"st1":[[516.547,520.906],[521.356,527.056],[527.506,533.428],[533.878,537.637],[538.087,541.663],[542.113,545.335]],"st2":[[545.785,550.683],[551.133,556.347],[556.797,562.138],[562.588,567.243],[567.693,572.477],[572.927,577.088]],"st3":[[577.538,579.25],[579.7,584.193],[584.643,591.904],[592.354,599.486],[599.936,605.671],[606.121,609.836]],"st4":[[610.286,613.54],[613.99,619.586],[620.036,625.4],[625.85,630.924],[631.374,636.595],[637.045,642.831]],"st5":[[643.281,648.876],[649.326,652.158],[652.608,658.342],[658.792,662.856],[663.306,670.446],[670.896,678.511]],"la1":[[678.961,682.735],[683.185,686.518],[686.968,690.036],[690.486,693.402],[693.852,695.548]],"la4":[[695.998,697.96],[698.41,705.286],[705.736,709.428],[709.878,715.603]],"la2":[[716.053,723.413],[723.863,730.092],[730.542,733.321],[733.771,737.701],[738.151,741.39]],"la3":[[741.84,748.853],[749.303,753.204],[753.654,760.747],[761.197,765.315],[765.765,771.388]],"n8":[[771.838,780.155],[780.605,787.716],[788.166,795.252],[795.702,802.825],[803.275,808.558],[809.008,816.938]],"n9":[[817.388,827.395],[827.845,834.602],[835.052,841.082],[841.532,853.154],[853.604,857.188],[857.638,864.726]],"n10":[[865.176,874.808],[875.258,880.72],[881.17,887.195],[887.645,893.586],[894.036,900.352],[900.802,907.922]],"n11":[[908.372,917.854],[918.304,928.447],[928.897,935.382],[935.832,940.569],[941.019,949.32],[949.77,956.315]],"n12":[[956.765,965.379],[965.829,971.87],[972.32,979.506],[979.956,987.103],[987.553,993.399]],"n13":[[993.849,1004.142],[1004.592,1010.92],[1011.37,1020.969],[1021.419,1026.295],[1026.745,1032.105]],"n14":[[1032.555,1042.133],[1042.583,1048.527],[1048.977,1055.432],[1055.882,1063.41],[1063.86,1069.92]],"n15":[[1070.37,1078.973],[1079.423,1086.378],[1086.828,1090.609],[1091.059,1099.058],[1099.508,1105.011]]}};
+const AUDIO = {"file":"listen-4821234d.mp4","order":["t1","t2","t3","t4","t5","t6","t7","t8","t9","n1","n2","n3","n4","n5","n6","n7","r1","r7","st1","st2","st3","st4","st5","la1","la4","la2","la3","n8","n9","n10","n11","n12","n13","n14","n15"],"t":{"t1":[[0.25,5.579],[6.029,12.41],[12.86,18.208],[18.658,22.577],[23.027,27.485]],"t2":[[27.935,31.76],[32.21,36.082],[36.532,40.805],[41.255,45.632],[46.082,51.233]],"t3":[[51.683,54.54],[54.99,60.377],[60.827,65.483],[65.933,71.972],[72.422,75.152]],"t4":[[75.602,80.455],[80.905,84.679],[85.129,92.536],[92.986,98.867],[99.317,104.118]],"t5":[[104.568,108.709],[109.159,116.021],[116.471,121.933],[122.383,129.093],[129.543,133.796]],"t6":[[134.246,138.112],[138.562,143.216],[143.666,149.66],[150.11,157.153],[157.603,162.245]],"t7":[[162.695,166.936],[167.386,172.443],[172.893,177.637],[178.087,182.413],[182.863,187.608]],"t8":[[188.058,191.429],[191.879,196.157],[196.607,201.817],[202.267,209.384],[209.834,213.265]],"t9":[[213.715,218.935],[219.385,225.59],[226.04,231.153],[231.603,238.617],[239.067,243.438]],"n1":[[243.888,249.862],[250.312,257.961],[258.411,265.17],[265.62,276.841],[277.291,282.423]],"n2":[[282.873,289.804],[290.254,296.702],[297.152,302.248],[302.698,309.154],[309.604,315.163]],"n3":[[315.613,324.004],[324.454,329.082],[329.532,336.35],[336.8,341.813],[342.263,348.533]],"n4":[[348.983,353.418],[353.868,359.451],[359.901,365.258],[365.708,372.442],[372.892,376.772]],"n5":[[377.222,382.214],[382.664,387.55],[388.0,393.352],[393.802,399.355],[399.805,405.399]],"n6":[[405.849,412.606],[413.056,418.988],[419.438,425.104],[425.554,429.118],[429.568,435.849]],"n7":[[436.299,442.582],[443.032,450.092],[450.542,455.302],[455.752,461.685],[462.135,466.721]],"r1":[[467.171,469.948],[470.398,472.906],[473.356,478.047],[478.497,480.226],[480.676,485.892],[486.342,488.438],[488.888,492.359],[492.809,494.597]],"r7":[[495.047,497.566],[498.016,501.679],[502.129,505.774],[506.224,508.337],[508.787,511.907],[512.357,514.781],[515.231,516.852]],"st1":[[517.302,521.671],[522.121,527.937],[528.387,534.255],[534.705,538.525],[538.975,542.603],[543.053,546.304]],"st2":[[546.754,551.502],[551.952,557.12],[557.57,562.841],[563.291,567.923],[568.373,572.994],[573.444,577.594]],"st3":[[578.044,579.727],[580.177,584.623],[585.073,592.426],[592.876,599.927],[600.377,605.942],[606.392,610.084]],"st4":[[610.534,613.833],[614.283,619.995],[620.445,625.92],[626.37,631.398],[631.848,637.343],[637.793,643.498]],"st5":[[643.948,649.509],[649.959,652.792],[653.242,658.977],[659.427,663.429],[663.879,671.135],[671.585,679.028]],"la1":[[679.478,683.251],[683.701,686.962],[687.412,690.406],[690.856,693.805],[694.255,696.02]],"la4":[[696.47,698.367],[698.817,705.541],[705.991,709.692],[710.142,715.811]],"la2":[[716.261,723.65],[724.1,730.253],[730.703,733.601],[734.051,737.968],[738.418,741.75]],"la3":[[742.2,749.317],[749.767,753.645],[754.095,761.006],[761.456,765.543],[765.993,771.592]],"n8":[[772.042,780.506],[780.956,787.713],[788.163,795.07],[795.52,802.645],[803.095,808.371],[808.821,816.977]],"n9":[[817.427,827.19],[827.64,834.442],[834.892,840.784],[841.234,852.81],[853.26,856.783],[857.233,864.199]],"n10":[[864.649,874.095],[874.545,879.962],[880.412,886.393],[886.843,892.706],[893.156,899.449],[899.899,907.04]],"n11":[[907.49,916.775],[917.225,927.195],[927.645,934.312],[934.762,939.476],[939.926,948.175],[948.625,955.057]],"n12":[[955.507,964.145],[964.595,970.512],[970.962,978.16],[978.61,985.745],[986.195,991.686]],"n13":[[992.136,1002.532],[1002.982,1009.305],[1009.755,1019.401],[1019.851,1024.716],[1025.166,1030.564]],"n14":[[1031.014,1040.463],[1040.913,1046.764],[1047.214,1053.627],[1054.077,1061.484],[1061.934,1068.273]],"n15":[[1068.723,1077.488],[1077.938,1084.899],[1085.349,1089.177],[1089.627,1097.476],[1097.926,1103.372]]}};
 
 // ---- data_drills.js ----
 // Spelling: [correct, wrong, finglish, meaning, category, optional custom note]
@@ -1981,7 +1984,7 @@ const SPELL = [
 ["خط","خت","khat","line; handwriting","t"],
 ["وسط","وست","vasat","middle","t"],
 ["طعم","تعم","ta'm","taste","t"],
-["تعطیل","طعتیل","ta'til","closed; holiday","t"],
+["تعطیل","طعتیل","ta'til","closed; holiday","t","This one has both: ت at the start, ط in the middle."],
 ["مطالعه","متالعه","motale'e","study, reading","t"],
 ["حیوان","هیوان","heyvan","animal","h"],
 ["حرف","هرف","harf","word; letter; talk","h"],
@@ -2113,7 +2116,7 @@ const HOMO = [
 
 // Proverbs: [persian, finglish, literal, meaning]
 const PROV = [
-["کار نیکو کردن از پر کردن است","kar-e nikoo kardan az por kardan ast","Doing something well comes from doing it a lot.","Practice makes perfect."],
+["کار~ نیکو کردن از پر کردن است","kar-e nikoo kardan az por kardan ast","Doing something well comes from doing it a lot.","Practice makes perfect."],
 ["قطره قطره جمع گردد، وانگهی دریا شود","ghatre ghatre jam' gardad, vangahi darya shavad","Drop by drop it gathers, and then it becomes a sea.","Little by little, it adds up."],
 ["یک دست صدا ندارد","yek dast seda nadarad","One hand makes no sound.","It takes teamwork."],
 ["دیوار موش دارد، موش هم گوش دارد","divar moosh darad, moosh ham goosh darad","Walls have mice, and mice have ears.","The walls have ears."],
@@ -2121,7 +2124,7 @@ const PROV = [
 ["آب که از سر گذشت، چه یک وجب چه صد وجب","ab ke az sar gozasht, che yek vajab che sad vajab","Once the water is over your head, one hand-span or a hundred makes no difference.","In for a penny, in for a pound."],
 ["هر که بامش بیش، برفش بیشتر","har ke bamash bish, barfash bishtar","The bigger your roof, the more snow it collects.","More money, more problems."],
 ["دوری و دوستی","doori o doosti","Distance and friendship.","A little distance keeps a friendship healthy."],
-["سنگ بزرگ علامت~ نزدن است","sang-e bozorg alamat-e nazadan ast","Picking up a huge stone is a sign you won't throw it.","Biting off more than you can chew."],
+["سنگ~ بزرگ علامت~ نزدن است","sang-e bozorg alamat-e nazadan ast","Picking up a huge stone is a sign you won't throw it.","An over-the-top promise or threat won't be carried out."],
 ["شتر دیدی، ندیدی","shotor didi, nadidi","You saw a camel? No, you didn't.","Keep it to yourself; you saw nothing."],
 ["ماه پشت~ ابر نمی|ماند","mah posht-e abr nemimanad","The moon doesn't stay behind the clouds forever.","The truth always comes out."],
 ["تا تنور داغ است، نان را بچسبان","ta tanoor dagh ast, nan ra bechasban","While the oven is hot, stick the bread on.","Strike while the iron is hot."],
@@ -2132,7 +2135,7 @@ const PROV = [
 ["هر گردی گردو نیست","har gerdi gerdoo nist","Not everything round is a walnut.","All that glitters is not gold."],
 ["مرغ~ همسایه غاز است","morgh-e hamsaye ghaz ast","The neighbor's hen is a goose.","The grass is always greener on the other side."],
 ["آشپز که دو تا شد، آش یا شور می|شود یا بی|نمک","ashpaz ke do ta shod, ash ya shoor mishavad ya bi-namak","With two cooks, the soup ends up too salty or bland.","Too many cooks spoil the broth."],
-["نابرده رنج، گنج میسر نمی|شود","nabordeh ranj, ganj moyassar nemishavad","Without enduring hardship, no treasure is won.","No pain, no gain."],
+["نابرده رنج، گنج میسر نمی|شود","naborde ranj, ganj moyassar nemishavad","Without enduring hardship, no treasure is won.","No pain, no gain."],
 ["از این گوش می|گیرد، از آن گوش در می|کند","az in goosh migirad, az an goosh dar mikonad","It goes in this ear and out of that one.","In one ear and out the other."],
 ["با یک گل بهار نمی|شود","ba yek gol bahar nemishavad","One flower doesn't make a spring.","One swallow doesn't make a summer."],
 ["دست بالای~ دست بسیار است","dast balaye dast besiar ast","There are many hands above every hand.","There's always someone better."],
@@ -2254,14 +2257,14 @@ const SPOKEN = [
 ["هیچ|چیز","hich chiz","هیچی","hichi","nothing","swap"],
 ["کمی","kami","یه کم","ye kam","a little","swap"],
 ["برای","baraye","واسه","vase","for","swap"],
-["گرسنه هستم","gorosne hastam","گشنمه","gooshname","I'm hungry","swap"]
+["گرسنه هستم","gorosne hastam","گشنمه","goshname","I'm hungry","swap"]
 ];
 const SPOKEN_RULES = {
 an: ["ān becomes oon", "Before n, a long ā is usually said oo: خانه (khane) is said khoone, نان (nan) is said noon. The same happens inside verbs: می|دانم (midanam) is midoonam."],
 verb: ["Verbs get shorter", "Spoken verbs drop sounds. می|روم (miravam) becomes miram, می|خواهم (mikhaham) becomes mikham, and an -ad at the end becomes -e: می|کند (mikonad) is mikone."],
 ast: ["است becomes -e", "است (ast) shrinks to a short -e stuck onto the word before it: خوب است (khoob ast) is khoobe, and چیست (chist) is chie."],
 ra: ["را becomes ro or -o", "The object marker را (ra) is said ro, or just -o after a word: کتابم را (ketabam ra) is ketabamo."],
-short: ["Clipped little words", "Common short words lose a sound: یک (yek) is ye, اگر (agar) is age, دیگر (digar) is dige, چه (che) is chi."],
+short: ["Clipped little words", "Common short words get clipped or change a vowel: یک (yek) is ye, اگر (agar) is age, دیگر (digar) is dige, چه (che) is chi."],
 pron: ["Pronouns stick on", "Instead of a separate او or شما, speech adds a short ending: به او (be oo) is behesh, به شما (be shoma) is behetoon."],
 plural: ["-ha becomes -a", "The plural ending ها (-ha) is usually said -a: کتاب|ها (ketabha) is ketaba, این|ها (inha) is ina."],
 swap: ["A different word", "Some everyday words are simply different from the written ones: you say آره (are), but books write بله (bale)."]
@@ -2279,7 +2282,7 @@ const ROOTS = [
 ["ن ظ ر","looking",[["نظر","nazar","opinion; look"],["منظره","manzare","view, scenery"],["ناظر","nazer","observer"],["انتظار","entezar","waiting; expectation"],["منتظر","montazer","waiting"]]],
 ["ط ب ع","nature; printing",[["طبیعت","tabi'at","nature"],["طبیعی","tabi'i","natural"],["طبع","tab'","temperament"],["مطبوعات","matboo'at","the press"]]],
 ["ث ب ت","fixing in place",[["ثابت","sabet","fixed"],["ثبت","sabt","registration"],["اثبات","esbat","proof"]]],
-["ض ر ر","harm; need",[["ضرر","zarar","harm, loss"],["مضر","mozerr","harmful"],["ضروری","zarouri","essential"],["ضرورت","zaroorat","necessity"]]],
+["ض ر ر","harm; need",[["ضرر","zarar","harm, loss"],["مضر","mozerr","harmful"],["ضروری","zaroori","essential"],["ضرورت","zaroorat","necessity"]]],
 ["ح ض ر","being present",[["حاضر","hazer","present, ready"],["حضور","hozoor","presence"],["محضر","mahzar","notary office"]]],
 ["ذ ک ر","mentioning",[["ذکر","zekr","mention"],["تذکر","tazakkor","reminder"],["مذکور","mazkoor","the above-mentioned"]]],
 ["ع ذ ر","excusing",[["عذر","ozr","excuse"],["معذرت","ma'zerat","apology"],["عذرخواهی","ozrkhahi","apology"]]],
@@ -2307,7 +2310,7 @@ const POEMS = [
  "These lines are displayed at the United Nations in New York."],
 ["Hafez","حافظ","Divan, 14th century",
  ["الا یا ایها الساقی ادر کأسا و ناولها","که عشق آسان نمود اول ولی افتاد مشکل|ها"],
- ["ala ya ayyoha-s-saghi, adar ka'san va navelha","ke eshgh asan nemood avval, vali oftad moshkel-ha"],
+ ["ala ya ayyoha-s-saghi, ader ka'san va navelha","ke eshgh asan nemood avval, vali oftad moshkel-ha"],
  ["O cupbearer, pass the cup around and hand it to me,","for love looked easy at first, but then the troubles came."],
  "The very first line of Hafez's Divan. Its first half is in Arabic."],
 ["Hafez","حافظ","Divan, 14th century",
@@ -2347,7 +2350,7 @@ const POEMS = [
  "Hafez's tomb in Shiraz is still one of the most visited places in Iran."],
 ["Hafez","حافظ","Divan, 14th century",
  ["در کوی نیک|نامی ما را گذر ندادند","گر تو نمی|پسندی تغییر کن قضا را"],
- ["dar kooy-e niknami ma ra gozar nadadand","gar to nemipasandi, taghir kon ghaza ra"],
+ ["dar kooy-e niknami ma ra gozar nadadand","gar to nemipasandi, taghyir kon ghaza ra"],
  ["They wouldn't let me walk down the street of good reputation;","if you don't like it, go and change fate."],
  "Hafez with a shrug and a smile."],
 ["Hafez","حافظ","Divan, 14th century",
@@ -2420,7 +2423,7 @@ const POEMS = [
  ["be jahan khorram az anam ke jahan khorram az oost","ashegham bar hame alam ke hame alam az oost"],
  ["I am happy in the world because the world's joy comes from Him;","I love the whole world, because the whole world comes from Him."],
  "Saadi wrote some of the best-loved ghazals before Hafez."],
-["Saadi","سعدی","Golestan, 1258",
+["Saadi","سعدی","Mawaez (ghazals), 13th century",
  ["ای دوست بر جنازه|ی دشمن چو بگذری","شادی مکن که با تو همین ماجرا رود"],
  ["ey doost, bar jenaze-ye doshman cho bogzari","shadi makon ke ba to hamin majera ravad"],
  ["Friend, when you pass your enemy's coffin,","don't celebrate: the same will happen to you."],
@@ -2434,14 +2437,14 @@ const POEMS = [
  ["بوی جوی مولیان آید همی","یاد یار مهربان آید همی"],
  ["booy-e jooy-e moolian ayad hami","yad-e yar-e mehraban ayad hami"],
  ["The scent of the Muliyan stream is drifting in;","the memory of a kind friend is drifting in."],
- "Rudaki is called the father of Persian poetry. Legend says this poem made a homesick emir ride straight home to Bukhara."]
+ "Rudaki is called the father of Persian poetry. Legend says the emir had stayed in Herat for years, and this poem made him ride straight home to Bukhara."]
 ];
 
 // ---- data_lex.js ----
 // Lexicon for the reader: [persian, finglish, meaning]. Multi-word phrases are matched first.
 const LEX = [
 // ---- small words ----
-["در","dar","in, at; door"],["و","va","and"],["به","be","to; in"],["از","az","from; of; than"],
+["در","dar","in, at; door; lid"],["و","va","and"],["به","be","to; in"],["از","az","from; of; than"],
 ["را","ra","(marks the object)"],["که","ke","that; which, who"],["با","ba","with"],["این","in","this"],
 ["است","ast","is"],["برای","baraye","for"],["هر","har","every, each"],["او","oo","he, she"],
 ["یک","yek","one; a"],["من","man","I"],["ما","ma","we; our"],["تا","ta","until; so that; as soon as"],
@@ -2524,7 +2527,7 @@ const LEX = [
 ["شاهنامه","shahname","the Shahnameh (Book of Kings)"],["روز","rooz","day"],["صبح","sobh","morning"],
 ["زندگی","zendegi","life"],["زیادی","ziadi","a lot of, much"],["مهاجران","mohajeran","immigrants"],
 ["پیامدهای","payamadha-ye","consequences (of)"],["مهمی","mohemi","important"],["ممکن","momken","possible"],
-["فکر","fekr","thought"],["دیگران","digaran","others"],["دنیا","donya","world"],["سوئدی","soedi","Swedish"],
+["فکر","fekr","thought"],["دیگران","digaran","others"],["دنیا","donya","world"],["سوئدی","su'edi","Swedish"],
 ["هفته","hafte","week"],["دیدن","didan","seeing; visiting"],["هوا","hava","weather; air"],
 ["قرار","gharar","rest, calm; appointment"],["بزرگ|ترها","bozorgtar-ha","the elders"],["ایرانی","irani","Iranian"],
 ["شروع","shoroo'","start"],["عید","eyd","holiday (Nowruz)"],
@@ -2648,7 +2651,7 @@ const LEX = [
 ["تخم|مرغ|ها","tokhm-e morgh-ha","the eggs"],["بزنید","bezanid","beat, whisk (polite command); hit"],["اضافه کنید","ezafe konid","add (polite command)"],
 ["هم بزنید","ham bezanid","stir, mix (polite command)"],["بریزید","berizid","pour (polite command)"],["پهن کنید","pahn konid","spread out (polite command)"],
 ["بگذارید","bogzarid","put (polite command)"],["ملایم","molayem","gentle, mild"],["بپزید","bepazid","cook (polite command)"],["طرف","taraf","side"],
-["طلایی","talayi","golden"],["بارش","barash","fall (of rain or snow)"],["شهرهای","shahr-ha-ye","the cities of; cities"],["شمالی","shomali","northern"],
+["طلایی","talayi","golden"],["بارش","baresh","fall (of rain or snow)"],["شهرهای","shahr-ha-ye","the cities of; cities"],["شمالی","shomali","northern"],
 ["تعطیل شدند","ta'til shodand","were closed"],["دوباره","dobare","again"],["بالا رفت","bala raft","went up"],["تیم","tim","team"],["ملی","melli","national"],
 ["فوتبال","footbal","football, soccer"],["بازی","bazi","game, match; play"],["دوستانه","doostane","friendly"],["آماده می|شود","amade mishavad","gets ready"],
 ["نمایشگاه","namayeshgah","exhibition, fair"],["گرم|تر","garmtar","warmer"],["مسافران","mosaferan","travelers, passengers"],["نوروزی","nowroozi","of Nowruz, New Year's"],
@@ -2703,7 +2706,7 @@ const LEX = [
 ["رانندگان","ranandegan","drivers"],["توصیه کرده است","towsie karde ast","has advised"],["احتیاط","ehtiat","caution"],["رانندگی کنند","ranandegi konand","(that they) drive"],
 // ---- listening: news about real events ----
 ["فضایی","fazayi","space (adjective), of space"],["تلسکوپ","teleskop","telescope"],["جیمز وب","jeymz veb","James Webb"],["بزرگ|ترین","bozorgtarin","the biggest, the largest"],
-["پرتاب شد","partab shod","was launched"],["پرتاب","partab","launch"],["موشک","mooshak","rocket"],["آریان","ariane","Ariane (a rocket)"],["گویان","guyan","Guiana"],
+["پرتاب شد","partab shod","was launched"],["پرتاب","partab","launch"],["موشک","mooshak","rocket"],["آریان","arian","Ariane (a rocket)"],["گویان","guyan","Guiana"],
 ["فرانسه","faranse","France"],["آمریکای جنوبی","amrika-ye jonoobi","South America"],["آمریکای شمالی","amrika-ye shomali","North America"],["آمریکا","amrika","America, the United States"],
 ["رفت","raft","went"],["حاصل","hasel","result, product"],["همکاری","hamkari","cooperation"],["ناسا","nasa","NASA"],["آژانس","azhans","agency"],["اروپا","oroopa","Europe"],
 ["کانادا","kanada","Canada"],["قطعه|ی","ghet'e-ye","piece (of)"],["قطعه","ghet'e","piece"],["شش|ضلعی","shesh-zel'i","hexagonal"],["ساخته شده","sakhte shode","is made, has been made"],
@@ -2722,7 +2725,7 @@ const LEX = [
 ["خورشیدگرفتگی","khorshid-gereftegi","solar eclipse"],["کامل","kamel","complete, total"],["بخش|هایی","bakhsh-hayi","parts"],["مکزیک","mekzik","Mexico"],["دیده شد","dide shod","was seen"],
 ["دقیقاً","daghighan","exactly"],["عبور می|کند","obur mikonad","passes"],["میلیون|ها","milyoon-ha","millions"],["نفر","nafar","person, people"],["تماشا","tamasha","watching"],
 ["پدیده","padide","phenomenon"],["مسیر","masir","path, route"],["سفر کردند","safar kardand","(they) traveled"],["تاریکی","tariki","darkness"],["طول کشید","tool keshid","lasted"],
-["هشدار دادند","hoshdar dadand","(they) warned"],["نگاه کردن","negah kardan","looking"],["مخصوص","makhsoos","special"],["بعدی","ba'di","next"],["رخ خواهد داد","rokh khahad dad","will happen"],["رخ داده بود","rokh dade bud","had happened"],["قبلی","ghabli","previous, the one before"],
+["هشدار دادند","hoshdar dadand","(they) warned"],["نگاه کردن","negah kardan","looking"],["مخصوص","makhsoos","special"],["بعدی","ba'di","next"],["رخ خواهد داد","rokh khahad dad","will happen"],["رخ داده بود","rokh dade bood","had happened"],["قبلی","ghabli","previous, the one before"],
 ["یونسکو","yunesko","UNESCO"],["ثبت کرد","sabt kard","registered, listed"],["ثبت شد","sabt shod","was recorded"],["ثبت شده بود","sabt shode bood","had been listed"],["ثبت","sabt","registration"],
 ["فهرست","fehrest","list"],["فرهنگی","farhangi","cultural"],["ناملموس","namalmoos","intangible"],["بشر","bashar","humanity"],["پرونده","parvande","file, nomination"],
 ["مشترک","moshtarak","joint, shared"],["از سوی","az su-ye","by, on behalf of"],["افغانستان","afghanestan","Afghanistan"],["ارائه شده بود","era'e shode bood","had been submitted"],
@@ -2732,12 +2735,12 @@ const LEX = [
 ["سال نوری","sal-e noori","light-year(s)"],["فاصله دارد","fasele darad","is ... away"],["فاصله|ی","fasele-ye","the distance of, the gap"],["فاصله","fasele","distance"],["جرم","jerm","mass"],
 ["برابر","barabar","times (as in ten times); equal"],["حلقه|ای","halghe-i","a ring"],["نارنجی","narenji","orange (color)"],["نور","noor","light"],
 ["انوشه","anooshe","Anousheh (a name)"],["انصاری","ansari","Ansari (a family name)"],["کارآفرین","karafarin","entrepreneur"],["ایرانی|آمریکایی","irani-amrikayi","Iranian-American"],
-["گردشگر","gardeshgar","tourist"],["ایرانی|تباری","irani-tabari","a person of Iranian descent"],["فضاپیما","fazapeyma","spacecraft"],["روسی","roosi","Russian"],["سایوز","soyuz","Soyuz"],
+["گردشگر","gardeshgar","tourist"],["ایرانی|تباری","irani-tabari","a person of Iranian descent"],["فضاپیما","fazapeyma","spacecraft"],["روسی","roosi","Russian"],["سایوز","sayuz","Soyuz"],
 ["پایگاه","paygah","base"],["بایکونور","baykonur","Baikonur"],["قزاقستان","ghazzaghestan","Kazakhstan"],["ماند","mand","stayed"],["وبلاگش","veblagash","his or her blog"],
 ["نوشت","nevesht","wrote"],["کودکی|اش","koodaki-ash","his or her childhood"],["گذراند","gozarand","spent (time)"],["نوجوانی","nowjavani","the teenage years"],
 ["بازی|های","bazi-ha-ye","the games of"],["المپیک","olampik","the Olympics"],["افتتاحیه","eftetahiye","opening (ceremony)"],["ورزشگاه","varzeshgah","stadium"],["بلکه","balke","but rather"],
 ["رود سن","rood-e sen","the river Seine"],["سن","sen","the Seine (river); also senn: age"],["رود","rood","river"],["ورزشکاران","varzeshkaran","athletes"],["قایق","ghayegh","boat"],["رژه رفتند","rezhe raftand","(they) paraded"],
-["سومین","sevvomin","the third"],["میزبان","mizban","host"],["رشته|های","reshte-ha-ye","the fields of, the sports of"],["کشتی","koshti","wrestling (also keshti: ship)"],
+["سومین","sevvomin","the third"],["میزبان","mizban","host"],["رشته|های","reshte-ha-ye","the fields of, the sports of"],["کشتی","koshti","wrestling (also kashti: ship)"],
 ["تکواندو","tekvando","taekwondo"],["شماره|ی","shomare-ye","number (of)"],["قرار دارد","gharar darad","is located, sits"],["بر سر","bar sar","over, about (a disagreement)"],["پیش از","pish az","before"],["شماره","shomare","number"],["پاریس","paris","Paris"],["مدال گرفتند","medal gereftand","(they) won medals"],["کردند","kardand","(they) did"],["دیده","dide","seen"],["تجریش","tajrish","Tajrish (a district and metro station in north Tehran)"],
 // ---- poetry ----
 ["بنی|آدم","bani-adam","human beings"],["اعضای","a'za-ye","members (of)"],["پیکرند","peykar-and","are (one) body"],
@@ -3273,6 +3276,10 @@ SHEETS.session = () => {
   const it = SES.c.it, pct = SES.i / SES.q.length * 100;
   return `<div class="progress"><i style="width:${pct}%"></i></div>` + (it.t === "nb" ? cardNB() : it.t === "read" ? cardRead() : it.t === "choose" ? cardChoose() : cardBuild());
 };
+// Spelling prompts: you spell from the sound, so the Finglish leads and the meaning sits under it.
+const soundPrompt = (fin, en) => `<div class="prompt-fin">${esc(fin)}</div><div class="prompt-mean">means <b>${esc(en)}</b></div>`;
+// For two words that sound the same, say so up front, so the rarer meaning doesn't look like a mistake.
+const pairNote = (fa, en, alt, altFin, fin, altEn) => `<span class="fa">${esc(fa)}</span> means ${esc(en)}. <span class="fa">${esc(alt)}</span>, ${altFin === fin ? "also said" : "said"} ${esc(altFin)}, means ${esc(altEn)}.`;
 function summaryHTML(big, line, extra) {
   return `<div class="summary"><p class="bigfa">آفرین!</p><div class="fin">afarin</div><div class="en">well done</div>
   <p class="big-n">${big}</p><p class="muted">${line}</p>${extra || ""}<div class="btn-row"><button class="btn full" data-act="close">Done</button></div></div>`;
@@ -3289,12 +3296,12 @@ function cardChoose() {
   const c = SES.c, w = c.w;
   const fb = !c.done ? "" : `<div class="fb ${c.right ? "good" : "badc"}">${c.right ? "Correct." : (c.pick === c.mis ? "Close, that's the classic misspelling." : "Not quite.")}
     </div>${rootHTML(w.fa)}<div class="btn-row"><button class="btn primary" data-act="cardgo">Next</button></div>`;
-  return `<div class="card" style="min-height:0;padding:22px 18px"><div class="kind">Pick the right spelling</div><div class="prompt-en">${esc(w.en)}</div><div class="fin">${esc(w.fin)}</div></div>
+  return `<div class="card" style="min-height:0;padding:22px 18px"><div class="kind">Pick the right spelling</div>${soundPrompt(w.fin, w.en)}</div>
   <div class="opts">${c.opts.map((o, i) => `<button class="opt ${c.done ? (o === w.fa ? "ok" : o === c.pick ? "bad" : "dim") : ""}" data-act="choose" data-i="${i}" ${c.done ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>${fb}`;
 }
 function cardBuild() {
   const c = SES.c, w = c.w, built = c.built.map(i => c.tiles[i].c).join("");
-  return `<div class="card" style="min-height:0;padding:22px 18px"><div class="kind">Spell it with the letters</div><div class="prompt-en">${esc(w.en)}</div><div class="fin">${esc(w.fin)}</div></div>
+  return `<div class="card" style="min-height:0;padding:22px 18px"><div class="kind">Spell it with the letters</div>${soundPrompt(w.fin, w.en)}</div>
   <div class="slot ${c.done ? (c.right ? "ok" : "bad") : ""}" aria-live="polite">${built ? esc(built) : `<span class="muted small" style="font-family:Lexend,sans-serif;font-weight:400">Tap the letters in order</span>`}</div>
   ${c.done ? `<div class="fb ${c.right ? "good" : "badc"}">${c.right ? "Perfect spelling." : `The right spelling is <span class="fa" style="font-weight:800;font-size:1.3em">${esc(w.fa)}</span>`}</div>${rootHTML(w.fa)}
     <div class="btn-row"><button class="btn primary" data-act="cardgo">Next</button></div>`
@@ -3508,7 +3515,7 @@ function startSpell(cat) {
   if (SHEET) { SHEET.kind = "spell"; SHEET.title = ttl; drawSheet(); topScroll(); } else openSheet("spell", ttl);
 }
 function spellNote(it) {
-  if (it[4] === "pair") return `<span class="fa">${esc(it[1])}</span> (${esc(it[5])}) means ${esc(it[6])}.`;
+  if (it[4] === "pair") return pairNote(it[0], it[3], it[1], it[5], it[2], it[6]);
   if (it[5]) return esc(it[5]);
   const a = [...it[0]], b = [...it[1]]; let c = ""; for (let i = 0; i < a.length; i++) if (a[i] !== b[i]) { c = a[i]; break; }
   return esc((SPELL_NOTES[it[4]] || "").replace("{c}", c));
@@ -3522,7 +3529,7 @@ SHEETS.spell = () => {
   const it = SPELL_[sp.order[sp.i]], flip = (sp.order[sp.i] * 7 + sp.i) % 2, opts = flip ? [it[1], it[0]] : [it[0], it[1]];
   const done = sp.ans != null;
   return chips + `<div class="progress"><i style="width:${sp.i / sp.order.length * 100}%"></i></div>
-  <div class="card" style="min-height:0;padding:22px 18px"><div class="kind">Which spelling means this?</div><div class="prompt-en">${esc(it[3])}</div><div class="fin">${esc(it[2])}</div></div>
+  <div class="card" style="min-height:0;padding:22px 18px"><div class="kind">${it[4] === "pair" ? "Same sound, two words. Which one is this?" : "Which spelling is right?"}</div>${soundPrompt(it[2], it[3])}</div>
   <div class="opts">${opts.map(o => `<button class="opt ${done ? (o === it[0] ? "ok" : o === sp.ans ? "bad" : "dim") : ""}" data-act="spans" data-v="${esc(o)}" ${done ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>
   ${done ? `<div class="fb ${sp.ans === it[0] ? "good" : "badc"}">${sp.ans === it[0] ? "Correct. " : "Not this time. "}${spellNote(it)}</div>${ROOT_OF[NORM(it[0])] ? rootHTML(it[0]) : ""}<div class="btn-row"><button class="btn primary" data-act="spnext">Next</button></div>`
     : `<p class="muted small" style="text-align:center;margin-top:14px">${sp.score} right so far</p>`}`;
@@ -3623,7 +3630,7 @@ function applySettings() {
 
 // ================= actions =================
 const ACT = {
-  tab: el => { S.tab = el.dataset.tab; save(); render(); window.scrollTo(0, 0); },
+  tab: el => { S.tab = el.dataset.tab; save(); render(); const sc = $("#scroller"); if (sc) sc.scrollTop = 0; },
   close: () => closeSheet(),
   speak: el => speak(el.dataset.t),
   startReview: () => { closeIfSession(); startSession("review"); },
@@ -3685,7 +3692,7 @@ const ACT = {
   tskip: () => { if (!TY || TY.done) return; const it = TY.items[TY.i]; if (it && it.hidden) markMiss("spell", it.t, { fin: it.fin, en: it.sub });
     TY.skipped++; nextTypeItem(); focusType(); },
   treveal: () => { const it = TY && TY.items[TY.i]; if (!it || !it.hidden) return; it.shown = true; TY.revealed++;
-    $("#tgt").innerHTML = `<span class="prompt-en">${esc(it.sub)}</span>` + wordSpans(it, prepTyped($("#tin").value, it.tg)); $("#tmsg").textContent = "Now type it."; focusType(); },
+    $("#tgt").innerHTML = `<span class="prompt-fin">${esc(it.fin)}</span>` + wordSpans(it, prepTyped($("#tin").value, it.tg)); $("#tmsg").textContent = "Now type it."; focusType(); },
   openParts: () => openSheet("parts", "Word parts"),
   drill: el => startDrill(el.dataset.id),
   spcat: el => startSpell(el.dataset.id),
@@ -3777,6 +3784,11 @@ document.addEventListener("input", e => {
 });
 document.addEventListener("keydown", e => { if (e.target.id === "tin" && e.key === "Enter") e.preventDefault(); });
 document.addEventListener("keydown", e => { if (e.key === "Escape" && SHEET) { if ($("#gloss").classList.contains("on")) hideGloss(); else closeSheet(); } });
+// iOS can leave the whole window scrolled after the keyboard closes, even though only the content box scrolls. Put it back.
+const typingNow = () => { const a = document.activeElement; return !!a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA"); };
+const unshift = () => { if (!typingNow() && (window.scrollY || document.documentElement.scrollTop || document.body.scrollTop)) { window.scrollTo(0, 0); document.body.scrollTop = 0; } };
+document.addEventListener("focusout", () => setTimeout(unshift, 80));
+if (window.visualViewport) window.visualViewport.addEventListener("resize", () => setTimeout(unshift, 80));
 document.addEventListener("visibilitychange", () => { if (!document.hidden && S.day.date !== today()) { rollDay(); if (!SHEET) render(); } });
 
 // ---- type.js ----
@@ -3854,7 +3866,7 @@ function typeShowItem() {
   $("#tcount").textContent = (TY.i + 1) + "/" + TY.items.length;
   const tin = $("#tin"); tin.value = ""; tin.classList.remove("bad", "ok"); TY.prevLen = 0; TY.wasOk = true; it.shown = false;
   if (it.letter) { $("#tkind").textContent = "Find this letter"; $("#tgt").innerHTML = `<span class="tletter fa">${esc(it.t)}</span>`; $("#tsub").textContent = it.sub; }
-  else if (it.hidden) { $("#tkind").textContent = "Type it in Persian"; $("#tgt").innerHTML = `<span class="prompt-en">${esc(it.sub)}</span>`; $("#tsub").textContent = it.fin; }
+  else if (it.hidden) { $("#tkind").textContent = "Type it in Persian"; $("#tgt").innerHTML = `<span class="prompt-fin">${esc(it.fin)}</span>`; $("#tsub").innerHTML = `means <b>${esc(it.sub)}</b>`; }
   else { $("#tkind").textContent = "Type this"; $("#tgt").innerHTML = wordSpans(it, "");
     $("#tsub").innerHTML = (it.finH ? `<span class="tfin">${it.finH}</span>` : "") + esc(it.sub); }
   $("#tmsg").textContent = "";
@@ -3888,7 +3900,7 @@ function onTypeInput() {
   if (U.length > TY.prevLen) { TY.keys += U.length - TY.prevLen; if (!okNow && TY.wasOk) { TY.errs++; sfx("soft"); } }
   TY.prevLen = U.length; TY.wasOk = okNow;
   if (okNow && byWord()) { const w = (U.match(/ /g) || []).length; if (w > (it.cred || 0)) { typeXP(w - (it.cred || 0)); it.cred = w; } }
-  if (!it.hidden || it.shown) $("#tgt").innerHTML = it.hidden ? `<span class="prompt-en">${esc(it.sub)}</span>` + wordSpans(it, U) : wordSpans(it, U);
+  if (!it.hidden || it.shown) $("#tgt").innerHTML = it.hidden ? `<span class="prompt-fin">${esc(it.fin)}</span>` + wordSpans(it, U) : wordSpans(it, U);
   tin.classList.toggle("bad", !okNow);
   if (it.hidden && !okNow && Ut.length >= T.length) $("#tmsg").textContent = "Not quite. Check the spelling, or tap Show answer.";
   if (Ut === T) { TY.chars += T.length; if (!it.shown) it.ok = true; typeXP(itemXP(it)); sfx("tick");
@@ -3991,7 +4003,7 @@ function cardNB() {
   let fb = "";
   if (done) {
     const msg = c.right ? (c.fixed ? "Right again, so it's off your list." : "Right. Once more and it's off your list.") : "Not yet. It will come back soon.";
-    const note = e.k === "spell" ? (e.altEn ? `<span class="fa">${esc(e.alt)}</span> (${esc(e.altFin)}) means ${esc(e.altEn)}.` : spellTip(e.fa, c.pick != null && c.opts[c.pick] !== e.fa ? c.opts[c.pick] : e.alt, e.cat))
+    const note = e.k === "spell" ? (e.altEn ? pairNote(e.fa, e.en, e.alt, e.altFin, e.fin, e.altEn) : spellTip(e.fa, c.pick != null && c.opts[c.pick] !== e.fa ? c.opts[c.pick] : e.alt, e.cat))
       : e.k === "homo" ? esc(c.h[6]) : "";
     fb = `<div class="fb ${c.right ? "good" : "badc"}">${msg} ${note}</div>${e.k !== "homo" ? rootHTML(e.fa) : ""}${e.k === "mean" && getW(e.fa) ? exampleHTML(getW(e.fa)) : ""}
       <div class="btn-row"><button class="btn primary" data-act="cardgo">Next</button></div>`;
@@ -4009,7 +4021,7 @@ function cardNB() {
       ${done ? "" : `<div class="cardtools"><button class="chip sm ${c.fin ? "on" : ""}" data-act="nbfin">Finglish</button><span class="muted small">What does it mean?</span></div>`}</div>
       <div class="opts en-opts">${c.opts.map((o, i) => `<button class="opt ${optCls(o, i)}" data-act="nbans" data-i="${i}" ${done ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>${fb}`;
   }
-  return `<div class="card" style="min-height:0;padding:22px 18px">${tag}<div class="kind">Pick the right spelling</div><div class="prompt-en">${esc(e.en)}</div><div class="fin">${esc(e.fin)}</div></div>
+  return `<div class="card" style="min-height:0;padding:22px 18px">${tag}<div class="kind">${e.altEn ? "Same sound, two words. Which one is this?" : "Pick the right spelling"}</div>${soundPrompt(e.fin, e.en)}</div>
     <div class="opts">${c.opts.map((o, i) => `<button class="opt ${optCls(o, i)}" data-act="nbans" data-i="${i}" ${done ? "disabled" : ""}>${esc(o)}</button>`).join("")}</div>${fb}`;
 }
 function nbAnswer(i) {
