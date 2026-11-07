@@ -3291,7 +3291,7 @@ function startSession(kind, opt = {}) {
     if (pool.length < 10) pool = ALLW.filter(w => DECK[w.deck].lvl <= 2 && buildable(w.fa));
     q = shuffle(pool).slice(0, 10).map(w => ({ fa: w.fa, t: "build", n: 0 })); title = "Build the word";
   }
-  SES = { kind, q, i: 0, right: 0, total: 0, xp: 0, c: null, practice: kind === "deck" || kind === "build", drill: kind === "build" ? "build" : null, logged: false };
+  SES = { kind, q, i: 0, right: 0, total: 0, xp: 0, known: 0, c: null, practice: kind === "deck" || kind === "build", drill: kind === "build" ? "build" : null, logged: false };
   newCard(); if (SHEET) { SHEET.kind = "session"; SHEET.title = title; drawSheet(); topScroll(); } else openSheet("session", title);
 }
 function newCard() {
@@ -3309,7 +3309,7 @@ function finishSession() {
   save();
 }
 SHEETS.session = () => {
-  if (!SES.c) return summaryHTML("+" + SES.xp + " XP", SES.drill ? `${SES.right} of ${SES.total} spelled right.` : `${SES.total} cards, ${SES.right} answered right.${SES.fixed ? ` ${SES.fixed} crossed off your mistakes list.` : ""}`,
+  if (!SES.c) return summaryHTML("+" + SES.xp + " XP", SES.drill ? `${SES.right} of ${SES.total} spelled right.` : `${SES.total} cards, ${SES.right} answered right.${SES.known ? ` ${SES.known === 1 ? "One word" : SES.known + " words"} you knew the first time ${SES.known === 1 ? "is" : "are"} marked as known and won't come up in reviews.` : ""}${SES.fixed ? ` ${SES.fixed} crossed off your mistakes list.` : ""}`,
     !SES.drill && dueList().length ? `<button class="btn primary full" data-act="startReview">Review ${dueList().length} due words</button>` : "");
   const it = SES.c.it, pct = SES.i / SES.q.length * 100;
   return `<div class="progress"><i style="width:${pct}%"></i></div>` + (it.t === "nb" ? cardNB() : it.t === "read" ? cardRead() : it.t === "choose" ? cardChoose() : cardBuild());
@@ -3348,7 +3348,12 @@ function cardBuild() {
 }
 function rateCard(q) {
   const c = SES.c, fa = c.it.fa, first = !seen(fa);
-  if (!SES.practice) grade(fa, q);
+  // A new word you know the first time you see it is marked as known, so it stays out of reviews.
+  // Knowing it on a later try (after Didn't know or Slow) schedules it for review as usual.
+  if (!SES.practice) {
+    if (q === 2 && first) { S.day.nw++; setKnown(fa); save(); SES.known++; }
+    else grade(fa, q);
+  }
   if (q !== 1 && S.miss["mean:" + fa]) nbResult("mean:" + fa, q === 2);
   const xp = [1, 2, 3][q] + (first && !SES.practice ? 2 : 0); SES.xp += xp; addXP(xp, "rev", "words"); SES.total++; if (q === 2) SES.right++;
   if (q < 2 && c.it.n < 2 && !SES.practice) SES.q.splice(Math.min(SES.i + 4, SES.q.length), 0, { fa, t: "read", n: c.it.n + 1 });
