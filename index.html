@@ -3843,9 +3843,18 @@ const LETTERS = Z([["ا","alef"],["ب","be"],["پ","pe"],["ت","te"],["ث","se"]
   ["ر","re"],["ز","ze"],["ژ","zhe"],["س","sin"],["ش","shin"],["ص","sad"],["ض","zad"],["ط","ta"],["ظ","za"],["ع","eyn"],["غ","gheyn"],["ف","fe"],
   ["ق","ghaf"],["ک","kaf"],["گ","gaf"],["ل","lam"],["م","mim"],["ن","noon"],["و","vav"],["ه","he-ye do-cheshm"],["ی","ye"]]);
 const TRICKY = "ثصضطظذحعغقژچپگخ";
+// Inside a word most letters change shape: a short form at the start, in the middle and at the end.
+// These seven never join the letter after them, so they only have an end shape.
+const NOJOIN = "ادذرزژو", TATWEEL = "ـ";
+const JOIN_WHERE = { start: "at the start of a word", mid: "in the middle of a word", end: "at the end of a word" };
+function joinedItem([c, n]) {
+  const f = pick(NOJOIN.includes(c) ? ["end"] : ["start", "mid", "end"]);
+  return { t: c, sub: `${n}, ${JOIN_WHERE[f]}`, letter: true, show: f === "start" ? c + TATWEEL : f === "mid" ? TATWEEL + c + TATWEEL : TATWEEL + c };
+}
+const soloItem = ([c, n]) => ({ t: c, sub: n, letter: true });
 const TMODES = {
-  letters: { fa: "حروف", t: "Letter hunt", d: "All 32 letters in random order. Learn where every key lives." },
-  tricky: { fa: "ص ظ ع", t: "Tricky letters", d: "The 15 keys you use least, twice each." },
+  letters: { fa: "حروف", t: "Letter hunt", d: "All 32 letters, on their own and joined the way they look inside words. Learn where every key lives." },
+  tricky: { fa: "ص ظ ع", t: "Tricky letters", d: "The 15 keys you use least, on their own and joined." },
   words: { fa: "واژه", t: "Copy words", d: "Ten words from your decks. Pure keyboard speed." },
   sentences: { fa: "جمله", t: "Copy sentences", d: "Five sentences from the reader, spaces and all." },
   dictation: { fa: "دیکته", t: "Dictation", d: "See the meaning, type the Persian. Spelling and speed together." },
@@ -3873,8 +3882,8 @@ function startTyping(mode) {
   const started = ALLW.filter(w => seen(w.fa)), easy = ALLW.filter(w => DECK[w.deck].lvl <= 2);
   const wpool = started.length >= 10 ? started : easy;
   let items = [];
-  if (mode === "letters") items = shuffle(LETTERS).map(([c, n]) => ({ t: c, sub: n, letter: true }));
-  if (mode === "tricky") { const L = LETTERS.filter(([c]) => TRICKY.includes(c)); items = [...shuffle(L), ...shuffle(L)].map(([c, n]) => ({ t: c, sub: n, letter: true })); }
+  if (mode === "letters") items = shuffle([...LETTERS.map(soloItem), ...LETTERS.map(joinedItem)]);
+  if (mode === "tricky") { const L = LETTERS.filter(([c]) => TRICKY.includes(c)); items = shuffle([...L.map(soloItem), ...L.map(joinedItem)]); }
   if (mode === "words") items = shuffle(wpool).slice(0, 10).map(w => ({ t: w.fa, sub: w.fin + ", " + w.en }));
   if (mode === "dictation") items = shuffle(wpool).slice(0, 10).map(w => ({ t: w.fa, sub: w.en, fin: w.fin, hidden: true }));
   if (mode === "sentences") items = shuffle(TEXTS_.flatMap(t => t.s.filter(s => plainLine(t, s)).map(s => ({ t: s[0], sub: s[1], tx: t }))))
@@ -3911,7 +3920,7 @@ function typeShowItem() {
   $("#tprog").style.width = (TY.i / TY.items.length * 100) + "%";
   $("#tcount").textContent = (TY.i + 1) + "/" + TY.items.length;
   const tin = $("#tin"); tin.value = ""; tin.classList.remove("bad", "ok"); TY.prevLen = 0; TY.wasOk = true; it.shown = false;
-  if (it.letter) { $("#tkind").textContent = "Find this letter"; $("#tgt").innerHTML = `<span class="tletter fa">${esc(it.t)}</span>`; $("#tsub").textContent = it.sub; }
+  if (it.letter) { $("#tkind").textContent = it.show ? "Find this letter: it's joined" : "Find this letter"; $("#tgt").innerHTML = `<span class="tletter fa">${esc(it.show || it.t)}</span>`; $("#tsub").textContent = it.sub; }
   else if (it.hidden) { $("#tkind").textContent = "Type it in Persian"; $("#tgt").innerHTML = `<span class="prompt-fin">${esc(it.fin)}</span>`; $("#tsub").innerHTML = `means <b>${esc(it.sub)}</b>`; }
   else { $("#tkind").textContent = "Type this"; $("#tgt").innerHTML = wordSpans(it, "");
     $("#tsub").innerHTML = (it.finH ? `<span class="tfin">${it.finH}</span>` : "") + esc(it.sub); }
